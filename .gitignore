@@ -1,0 +1,30 @@
+# secrets — must never be committed
+.env
+.env.*
+!.env.example
+CLAUDE.md
+*.keystore
+keystore/
+*.key
+*.pem
+
+# dependencies / build output
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vercel/
+.vite/
+
+# hardhat
+contracts/artifacts/
+contracts/cache/
+contracts/typechain-types/
+
+# editors / os
+.DS_Store
+*.local
+.idea/
+.vscode/*
+!.vscode/extensions.json
+npm-debug.log*

@@ -1,0 +1,39 @@
+/* Design tokens. Single source of truth for colour, type and spacing.
+   Risk is never communicated by colour alone — see components/RiskBadge. */
+:root {
+  /* palette (from the brief — do not add colours) */
+  --ink: #f4f7ec;
+  --muted: #a8c9be;
+  --deep-teal: #004f49;
+  --teal-2: #00665d;
+  --teal-3: #087a6d;
+  --lime: #a8ff32;
+  --lime-ink: #123a26;
+  --warning: #ffd166;
+  --danger: #ff756d;
+
+  /* derived, non-decorative */
+  --line: rgba(168, 201, 190, 0.22);
+  --line-strong: rgba(168, 201, 190, 0.4);
+  --surface: var(--teal-2);
+  --surface-2: var(--teal-3);
+  --shell: var(--deep-teal);
+
+  /* 8px spacing scale */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 40px;
+  --s6: 48px;
+
+  /* restrained radii */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+
+  --font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --focus: 0 0 0 2px var(--shell), 0 0 0 4px var(--lime);
+}

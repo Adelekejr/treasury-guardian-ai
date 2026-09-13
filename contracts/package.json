@@ -1,0 +1,18 @@
+{
+  "name": "@treasury-guardian/contracts",
+  "private": true,
+  "version": "0.1.0",
+  "description": "TreasuryGuardian Solidity sources, Hardhat tests and the Arbitrum Sepolia deploy script.",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:arbitrum-sepolia": "hardhat run scripts/deploy.ts --network arbitrumSepolia"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.22.19",
+    "solc": "0.8.26"
+  }
+}
