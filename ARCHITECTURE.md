@@ -16,7 +16,7 @@ flowchart TD
     RPC --> CA
     FIX --> CA
 
-    CA["services/chain<br/>ChainAdapter boundary"] -->|"TransactionEvent[]<br/>provenance: ONCHAIN | DEMO_FIXTURE"| POL
+    CA["services/chain<br/>ChainAdapter boundary"] -->|"TransactionEvent list<br/>provenance ONCHAIN or DEMO_FIXTURE"| POL
 
     POL["services/policy/rules.ts<br/>deterministic engine"] -->|RiskAssessment: verdict + checks + observed facts| GUARD
     POL -->|verdict| UI

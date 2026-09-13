@@ -17,15 +17,16 @@ implementation commit.
 | 8 | AI adapter + structured output validation | Done — mock by default, remote optional |
 | 9 | Demo Mode fallback wired through every external dependency | Done |
 | 10 | Error states, remaining tests | Done — 41 frontend tests, 16 contract tests |
-| 11 | README, ARCHITECTURE.md, architecture diagram, deployment instructions | **Not started** |
+| 11 | README, ARCHITECTURE.md, architecture diagram, deployment instructions | Done |
 | 12 | Production build + Vercel deploy config | `vercel.json` written, `npm run build` passes |
 
 ## Where I am
 
-Last file worked on: `src/components/EventTable.tsx` and `src/styles/base.css` —
-adding the mobile card layout (wide tables collapse to record cards below
-720px) and a foreign-chain warning on any event that is not on chain 421614.
-That change is committed, rebuilt and verified in a headless browser.
+Last files worked on: `README.md` and `ARCHITECTURE.md` (step 11), after
+`src/components/EventTable.tsx` and `src/styles/base.css` — where wide tables
+collapse to record cards below 720px and any event not on chain 421614 carries
+a foreign-chain warning. All of it is committed, rebuilt and verified in a
+headless browser.
 
 Verified in this session:
 - `npm run build` succeeds; `tsc -b` reports zero errors; `eslint .` is clean.
@@ -35,17 +36,16 @@ Verified in this session:
 
 ## Next three actions
 
-1. Write `README.md` (setup, architecture, contract safety limits, deployment,
-   limitations, safety, and the plain statement that a browser-held AI key is
-   session-only) and `ARCHITECTURE.md` with the data-flow diagram.
-2. Push the branch and hand over the deploy checkpoint: I need you to confirm
-   your funded Arbitrum Sepolia wallet address, the approver address and the
-   recipient allowlist before anything is deployed (step 6 — I will not deploy
-   until you confirm).
-3. After you confirm and the contract is deployed, fill in
-   `VITE_GUARDIAN_ADDRESS` / `VITE_TREASURY_ADDRESS`, flip `VITE_DEMO_MODE` to
-   `false`, and re-run the live path end to end (poller, receipt verification,
-   wrong-network handling) against the deployed address.
+1. **Waiting on you — the step 6 stop.** Confirm your funded Arbitrum Sepolia
+   wallet, the approver address, the recipient allowlist and the transfer limit.
+   Nothing is deployed until you do.
+2. Deploy `TreasuryGuardian` with those values
+   (`npm run deploy:arbitrum-sepolia --workspace @treasury-guardian/contracts`)
+   and record the address.
+3. Fill in `VITE_GUARDIAN_ADDRESS` / `VITE_TREASURY_ADDRESS`, set
+   `VITE_DEMO_MODE=false`, and re-run the live path end to end — poller,
+   receipt verification, wrong-network handling — then deploy the frontend to
+   Vercel.
 
 ## Known gaps
 
