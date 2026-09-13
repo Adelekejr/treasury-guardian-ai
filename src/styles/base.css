@@ -275,8 +275,12 @@ code,
   color: var(--warning);
 }
 .badge--blocked {
+  /* The most severe verdict is the only filled risk chip, so it keeps the
+     highest contrast of the four in colour AND in greyscale. */
+  background: var(--danger);
   border-color: var(--danger);
-  color: var(--danger);
+  color: #2a0b08;
+  font-weight: 700;
 }
 .badge--unknown {
   border-color: var(--line-strong);
