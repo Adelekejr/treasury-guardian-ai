@@ -1,9 +1,9 @@
 /**
  * Status marks.
  *
- * Risk always carries an icon with a distinct silhouette, the word, and a
- * colour — it survives greyscale. Provenance is not a warning, so it renders
- * as quiet monospace text with a small dot, never as a coloured pill.
+ * Risk carries an icon with its own silhouette, the word, and a colour, so it
+ * survives greyscale. Provenance is a fact about where data came from rather
+ * than a warning, so it renders as quiet monospace text with a small dot.
  */
 import type { Provenance, RiskVerdict } from '../types';
 import { ARBITRUM_SEPOLIA } from '../config/network';
@@ -47,8 +47,8 @@ export function RiskBadge({ verdict }: { verdict: RiskVerdict }): React.JSX.Elem
 }
 
 /**
- * Provenance, rendered on every event as required — quietly.
- * `compact` drops the word and keeps the dot plus a tooltip.
+ * Provenance, rendered quietly on every event. `compact` drops the word and
+ * keeps the dot plus a tooltip.
  */
 export function ProvenanceMark({
   provenance,
@@ -59,7 +59,7 @@ export function ProvenanceMark({
 }): React.JSX.Element {
   const demo = provenance === 'DEMO_FIXTURE';
   const title = demo
-    ? 'Demo fixture — deterministic sample data, not read from the chain'
+    ? 'Demo fixture. Deterministic sample data, not read from the chain'
     : 'Read from Arbitrum Sepolia';
   return (
     <span className="prov" title={title}>

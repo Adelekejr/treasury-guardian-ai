@@ -1,6 +1,6 @@
 /**
- * TreasuryGuardian ABI — hand-mirrored from contracts/contracts/TreasuryGuardian.sol.
- * Nothing here is invented: every entry exists in that source file.
+ * TreasuryGuardian ABI, hand-mirrored from
+ * contracts/contracts/TreasuryGuardian.sol. Every entry exists in that file.
  */
 import { keccak256, toBytes } from 'viem';
 
@@ -189,8 +189,8 @@ export const TREASURY_GUARDIAN_ABI = [
 ] as const;
 
 /**
- * Method tag: bytes4(keccak256(bytes(label))) — the same derivation the deploy
- * script uses, so labels in the UI map to the tags stored on-chain.
+ * Method tag, computed as bytes4(keccak256(bytes(label))). The deploy script
+ * derives it the same way, so labels in the UI map to the tags stored on chain.
  */
 export function methodTag(label: string): `0x${string}` {
   return keccak256(toBytes(label)).slice(0, 10) as `0x${string}`;

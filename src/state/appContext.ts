@@ -63,7 +63,7 @@ export interface AppContextValue {
   readonly contractAvailable: boolean;
   readonly contractReason: string | null;
   readonly simulated: SimulatedState;
-  /** Wallet picker state — see components/WalletModal.tsx. */
+  /** Wallet picker state. See components/WalletModal.tsx. */
   readonly walletModalOpen: boolean;
   readonly detectedWallets: readonly Eip6963ProviderDetail[];
   readonly connectingWalletId: string | null;

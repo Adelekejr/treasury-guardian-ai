@@ -1,6 +1,6 @@
 /**
- * Demo chain adapter. Serves the deterministic fixtures and never touches the
- * network. Everything it returns is stamped DEMO_FIXTURE.
+ * Demo chain adapter. It serves the deterministic fixtures and never touches
+ * the network. Everything it returns is stamped DEMO_FIXTURE.
  */
 import { ARBITRUM_SEPOLIA, SUPPORTED_CHAIN_ID } from '../../config/network';
 import type { AppConfig } from '../../config/env';
@@ -18,7 +18,7 @@ export function createDemoChainAdapter(config: AppConfig): ChainAdapter {
   void config;
   return {
     mode: 'demo',
-    label: 'Demo Mode — deterministic fixtures',
+    label: 'Demo Mode, deterministic fixtures',
 
     async getNetworkStatus({ connectedChainId, now }: NetworkStatusInput): Promise<NetworkStatus> {
       const wrongNetwork = connectedChainId !== null && connectedChainId !== SUPPORTED_CHAIN_ID;
@@ -34,7 +34,7 @@ export function createDemoChainAdapter(config: AppConfig): ChainAdapter {
         provenance: 'DEMO_FIXTURE',
         message: wrongNetwork
           ? 'Your wallet is on another chain. Demo data is still shown, but no action can be prepared.'
-          : 'Demo Mode is active — no RPC calls are made and no funds can move.',
+          : 'Demo Mode is active. No RPC calls are made and no funds can move.',
       };
     },
 

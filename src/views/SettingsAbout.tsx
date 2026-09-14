@@ -1,4 +1,4 @@
-/** Screen 6 — Settings and about. Disclosure, limits, and the state preview. */
+/** Screen 6. Settings and about: disclosure, limits, and the state preview. */
 import { useState } from 'react';
 import { ARBITRUM_SEPOLIA, FORBIDDEN_CHAINS, explorerAddressUrl } from '../config/network';
 import { formatEthWithUnit } from '../lib/format';
@@ -56,12 +56,12 @@ export function SettingsAbout(): React.JSX.Element {
         <p className="small">
           {demoActive
             ? demoReason
-            : 'Demo Mode is off — the app is reading Arbitrum Sepolia over the configured RPC.'}
+            : 'Demo Mode is off. The app is reading Arbitrum Sepolia over the configured RPC.'}
         </p>
         <p className="small muted">
-          When Demo Mode is on, every number, event and balance is a deterministic fixture and is
-          labelled “Demo fixture” wherever it appears — not only on this screen. Nothing is broadcast
-          and no transaction hash is ever produced.
+          When Demo Mode is on, every number, event and balance is a deterministic fixture, and it
+          is labelled as one wherever it appears rather than only on this screen. Nothing is
+          broadcast and no transaction hash is ever produced.
         </p>
         <p className="tiny muted">Data source: {adapterLabel}</p>
       </section>
@@ -107,7 +107,7 @@ export function SettingsAbout(): React.JSX.Element {
           </dd>
           <dt>Event polling</dt>
           <dd className="prose">
-            every {config.pollIntervalMs} ms over {config.lookbackBlocks.toString()} blocks — the
+            every {config.pollIntervalMs} ms over {config.lookbackBlocks.toString()} blocks. The
             public Arbitrum RPC has no WebSocket, so the app polls getLogs
           </dd>
           <dt>Repository</dt>
@@ -142,12 +142,13 @@ export function SettingsAbout(): React.JSX.Element {
       <section className="card stack" aria-label="AI provider">
         <h2>AI provider</h2>
         <p className="small">
-          {aiName} — {aiReason}
+          {aiName}. {aiReason}
         </p>
         <p className="small muted">
           The API key is entered here and held in memory for this browser session only. It is never
-          written to storage, never logged, and never placed in a VITE_ variable — anything with that
-          prefix ships to the browser and must be treated as public. Reloading the page clears it.
+          written to storage, never logged, and never placed in a VITE_ variable, since anything
+          with that prefix ships to the browser and has to be treated as public. Reloading the page
+          clears it.
         </p>
         <div className="field">
           <label className="field__label" htmlFor="ai-key">
@@ -222,7 +223,7 @@ export function SettingsAbout(): React.JSX.Element {
         <h2>Known limitations</h2>
         <ul className="small muted" style={{ margin: 0, paddingLeft: 18 }}>
           <li>Testnet only. No mainnet, Arbitrum One or Arbitrum Nova path exists in the code.</li>
-          <li>Event history covers the polling window, not the full chain history — there is no indexer.</li>
+          <li>Event history covers the polling window rather than full chain history. There is no indexer.</li>
           <li>The AI explanation is advisory. It cannot change a verdict, and the app works without it.</li>
           <li>Decisions recorded in Demo Mode are local to the browser session and are not persisted.</li>
           <li>A browser-held API key is visible to anything running in the page; the mock adapter is the safe default.</li>

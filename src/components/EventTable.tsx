@@ -1,7 +1,7 @@
 /**
- * Dense event readout. Data is monospace with tabular figures; prose columns
- * opt out. Provenance is on every row, quietly. Below 720px the same records
- * render as cards so the screen stays usable on a phone.
+ * Dense event readout. Data is monospace with tabular figures, and prose
+ * columns opt out of that. Provenance sits on every row. Below 720px the same
+ * records render as cards so the screen stays usable on a phone.
  */
 import type { RiskAssessment, TransactionEvent } from '../types';
 import { SUPPORTED_CHAIN_ID, describeChainId } from '../config/network';

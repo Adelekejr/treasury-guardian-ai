@@ -2,9 +2,9 @@
  * Runtime configuration.
  *
  * Everything read here comes from `import.meta.env.VITE_*`, which is bundled
- * into the browser build and is therefore PUBLIC. No secret is ever read here:
- * the deployer key lives only in contracts/.env, and the AI provider key is
- * typed in at runtime and held in memory for the session.
+ * into the browser build and is public. No secret is read here. The deployer
+ * key lives only in contracts/.env, and the AI provider key is typed in at
+ * runtime and held in memory for the session.
  */
 import { parseAddressList, parseStringList } from '../lib/address';
 import { parseEthToWei } from '../lib/format';
@@ -55,8 +55,8 @@ function int(env: RawEnv, key: string, fallback: number, min: number): number {
 }
 
 /**
- * Build the config. Refuses any chain id other than Arbitrum Sepolia — the app
- * must not be configurable onto another network.
+ * Build the config. Any chain id other than Arbitrum Sepolia is refused, so the
+ * app cannot be configured onto another network.
  */
 export function loadConfig(env: RawEnv): AppConfig {
   const warnings: string[] = [];
@@ -95,7 +95,7 @@ export function loadConfig(env: RawEnv): AppConfig {
 
   const demoMode = bool(env, 'VITE_DEMO_MODE', true);
   if (!demoMode && !guardianAddress) {
-    warnings.push('Live mode is on but no contract address is configured — contract actions are unavailable.');
+    warnings.push('Live mode is on but no contract address is configured, so contract actions are unavailable.');
   }
 
   const aiEndpoint = str(env, 'VITE_AI_ENDPOINT') ?? null;

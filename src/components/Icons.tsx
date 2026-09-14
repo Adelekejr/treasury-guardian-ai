@@ -1,9 +1,9 @@
 /**
  * Icon set.
  *
- * Every risk icon has a deliberately different silhouette — octagon, triangle,
- * dashed circle, shield — so the four verdicts stay distinguishable with the
- * colour removed, and remain paired with their text label everywhere.
+ * The four risk icons use different silhouettes (octagon, triangle, dashed
+ * circle, shield) so the verdicts stay distinguishable with the colour
+ * removed. Each one is paired with its text label everywhere it appears.
  */
 export interface IconProps {
   readonly size?: number;
@@ -26,9 +26,9 @@ function svgProps(size: number): Record<string, string | number> {
 }
 
 /**
- * Blocked — a solid octagon with the bar knocked out. Filled, so its
- * silhouette cannot be mistaken for the outlined circle or shield, and it
- * carries the most visual weight of the four verdicts.
+ * Blocked. A solid octagon with the bar knocked out. Filling it keeps the
+ * silhouette clear of the outlined circle and shield, and gives the most
+ * severe verdict the most visual weight.
  */
 export function IconBlocked({ size = 14, className }: IconProps): React.JSX.Element {
   return (
@@ -43,7 +43,7 @@ export function IconBlocked({ size = 14, className }: IconProps): React.JSX.Elem
   );
 }
 
-/** Review required — triangle with a bang. */
+/** Review required. Triangle with a bang. */
 export function IconReview({ size = 14, className }: IconProps): React.JSX.Element {
   return (
     <svg {...svgProps(size)} className={className}>
@@ -54,7 +54,7 @@ export function IconReview({ size = 14, className }: IconProps): React.JSX.Eleme
   );
 }
 
-/** Insufficient data — dashed circle with a query mark. */
+/** Insufficient data. Dashed circle with a query mark. */
 export function IconUnknown({ size = 14, className }: IconProps): React.JSX.Element {
   return (
     <svg {...svgProps(size)} className={className}>
@@ -65,7 +65,7 @@ export function IconUnknown({ size = 14, className }: IconProps): React.JSX.Elem
   );
 }
 
-/** Low risk — shield with a check. */
+/** Low risk. Shield with a check. */
 export function IconLow({ size = 14, className }: IconProps): React.JSX.Element {
   return (
     <svg {...svgProps(size)} className={className}>
@@ -75,7 +75,7 @@ export function IconLow({ size = 14, className }: IconProps): React.JSX.Element 
   );
 }
 
-/** Information — solid circle with an i. Distinct from the dashed circle. */
+/** Information. Solid circle with an i, distinct from the dashed circle. */
 export function IconInfo({ size = 14, className }: IconProps): React.JSX.Element {
   return (
     <svg {...svgProps(size)} className={className}>

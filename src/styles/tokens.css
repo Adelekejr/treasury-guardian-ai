@@ -1,10 +1,10 @@
 /* Design tokens.
 
-   Surfaces are a lift scale on a near-black canvas: canvas → card → raised.
-   The teal family is an accent (borders, emphasis, the network mark), not the
-   shell. Lime is reserved for the primary action and the low-risk status.
-   Amber and red are semantic only. Risk is never signalled by colour alone —
-   see components/Icons.tsx. */
+   Surfaces lift in steps on a near-black canvas: canvas, then card, then
+   raised. The teal family is used for borders, emphasis and the network mark
+   rather than for the shell. Lime is reserved for the primary action and the
+   low-risk status. Amber and red are semantic. Colour never signals risk on
+   its own; see components/Icons.tsx. */
 :root {
   /* ---- surface lift scale ---- */
   --canvas: #061512;

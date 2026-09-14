@@ -1,10 +1,10 @@
 /**
- * Contract service: the only place that can move testnet value.
+ * Contract service. The only place that can move testnet value.
  *
- * A proposed action reaches the chain in three explicit, separately
- * acknowledged transactions — propose, approve, execute — so nothing is
- * autonomous and nothing is bundled behind a single click's worth of consent.
- * Every hash reported here comes from a real receipt; nothing is fabricated.
+ * A proposed action reaches the chain in three separately acknowledged
+ * transactions (propose, approve, execute), so nothing is autonomous and
+ * nothing is bundled behind a single click's worth of consent. Every hash
+ * reported here comes from a real receipt.
  */
 import { createPublicClient, createWalletClient, custom, http, type PublicClient } from 'viem';
 import { arbitrumSepolia } from 'viem/chains';
@@ -59,7 +59,7 @@ function rejectionResult(
   };
 }
 
-/** Demo service: records decisions locally and never broadcasts anything. */
+/** Demo service. Records decisions locally and never broadcasts anything. */
 export function createDemoContractService(): ContractService {
   return {
     mode: 'demo',
@@ -72,7 +72,7 @@ export function createDemoContractService(): ContractService {
         label: 'Record proposal',
         state: 'skipped',
         hash: null,
-        message: 'Demo Mode — nothing is broadcast and no transaction hash exists.',
+        message: 'Demo Mode. Nothing is broadcast and no transaction hash exists.',
       });
       return {
         actionId: action.id,

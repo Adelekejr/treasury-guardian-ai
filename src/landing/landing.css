@@ -1,6 +1,6 @@
-/* Landing page. Same palette and type system as the dashboard; the only
-   differences are scale and air. No imagery, no gradients — the hierarchy is
-   made of type size, weight and space. */
+/* Landing page. Same palette and type system as the dashboard, with more scale
+   and more air. There is no imagery and no gradient work. Hierarchy is made of
+   type size, weight and space. */
 @import '../styles/tokens.css';
 
 .lp {

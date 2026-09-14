@@ -1,11 +1,10 @@
 /**
  * Wallet adapter.
  *
- * The app talks to ONE selected EIP-1193 provider, chosen in the wallet modal
- * from the wallets that announced themselves over EIP-6963. That choice is held
- * here so every later call — chain reads, switch requests, contract writes —
- * goes to the same wallet instead of whichever one last claimed
- * `window.ethereum`.
+ * The app talks to one selected EIP-1193 provider, picked in the wallet modal
+ * from the wallets that announced themselves over EIP-6963. That choice is
+ * held here so later chain reads, switch requests and contract writes all go
+ * to the same wallet instead of whichever one last claimed `window.ethereum`.
  *
  * No private key is ever requested, read or stored.
  */
@@ -37,8 +36,8 @@ export function getActiveWallet(): Eip6963ProviderDetail | null {
 }
 
 /**
- * The provider the app should use: the one the human picked, or the legacy
- * `window.ethereum` when nothing has been picked yet.
+ * The provider the app should use. That is the one the human picked, falling
+ * back to `window.ethereum` when nothing has been picked yet.
  */
 export function getActiveProvider(): Eip1193Provider | null {
   if (active) return active.provider;
@@ -59,7 +58,7 @@ function parseChainId(value: unknown): number {
 export function describeWalletError(error: unknown): string {
   const code = (error as { code?: number })?.code;
   if (code === 4001) return 'Connection request rejected in the wallet.';
-  if (code === -32002) return 'A connection request is already open — check the wallet window.';
+  if (code === -32002) return 'A connection request is already open. Check the wallet window.';
   const message = error instanceof Error ? error.message : String(error);
   return message || 'The wallet did not respond.';
 }
@@ -86,7 +85,7 @@ export async function getConnectedAccounts(): Promise<readonly string[]> {
 }
 
 /**
- * Connect to one specific announced wallet. The caller decides which; this
+ * Connect to one specific announced wallet. The caller decides which one. This
  * never guesses, and never falls back to a different provider on failure.
  */
 export async function connectWithProvider(detail: Eip6963ProviderDetail): Promise<WalletConnection> {

@@ -73,7 +73,7 @@ const FAILING_AI_ADAPTER: AiAdapter = {
     return {
       status: 'UNAVAILABLE',
       explanation: null,
-      error: 'Simulated provider outage — the deterministic verdict and evidence still stand.',
+      error: 'Simulated provider outage. The deterministic verdict and evidence still stand.',
     };
   },
 };
@@ -81,7 +81,7 @@ const FAILING_AI_ADAPTER: AiAdapter = {
 const UNAVAILABLE_CONTRACT: ContractService = {
   mode: 'live',
   available: false,
-  unavailableReason: 'Simulated contract outage — the guardian contract cannot be reached.',
+  unavailableReason: 'Simulated contract outage. The guardian contract cannot be reached.',
   async submitApproval() {
     throw new Error('The guardian contract is unavailable.');
   },
@@ -133,7 +133,7 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
 
   const demoActive = config.demoMode || fallbackReason !== null;
   const demoReason = config.demoMode
-    ? 'VITE_DEMO_MODE is true — the app runs entirely on deterministic fixtures.'
+    ? 'VITE_DEMO_MODE is true, so the app runs entirely on deterministic fixtures.'
     : fallbackReason;
 
   const nowSeconds = useCallback(
@@ -155,7 +155,7 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
   const aiAdapter = simulated === 'AI_UNAVAILABLE' ? FAILING_AI_ADAPTER : aiSelection.adapter;
   const aiReason =
     simulated === 'AI_UNAVAILABLE'
-      ? 'Simulated AI outage — the app keeps working without an explanation.'
+      ? 'Simulated AI outage. The app keeps working without an explanation.'
       : aiSelection.reason;
 
   const policy = useMemo(
@@ -188,7 +188,7 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
           blockNumber: null,
           checkedAt: nowSeconds(),
           provenance: demoActive ? 'DEMO_FIXTURE' : 'ONCHAIN',
-          message: 'Simulated RPC outage — no chain reads are possible right now.',
+          message: 'Simulated RPC outage. No chain reads are possible right now.',
         });
         setEvents([]);
         setSnapshot(null);
@@ -403,7 +403,7 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
     [contractService, nowSeconds, prepare, proposals, wallet.address],
   );
 
-  /** Connect always opens the picker — it never guesses which wallet to use. */
+  /** Connect always opens the picker. It never guesses which wallet to use. */
   const connect = useCallback(async () => {
     requestProviders();
     setWallet((previous) => ({ ...previous, error: null }));

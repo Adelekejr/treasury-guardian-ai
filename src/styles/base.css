@@ -1,11 +1,11 @@
 @import './tokens.css';
 
 /* ===========================================================================
-   Instrument panel. Two type roles, no exceptions:
-     - Plus Jakarta Sans: headings and prose.
-     - JetBrains Mono, tabular figures: every piece of data — addresses,
-       amounts, timestamps, method names, chain ids, block numbers, hashes.
-   Data blocks are dense; sections are generously separated.
+   Two type roles, applied without exception.
+   Plus Jakarta Sans sets headings and prose. JetBrains Mono with tabular
+   figures sets every piece of data: addresses, amounts, timestamps, method
+   names, chain ids, block numbers, hashes. Rows inside a data block are
+   tight, and sections are separated generously.
    =========================================================================== */
 
 *,

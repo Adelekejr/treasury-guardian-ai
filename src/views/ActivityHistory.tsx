@@ -1,4 +1,4 @@
-/** Screen 5 — Activity history. Searchable list of analysed events + outcomes. */
+/** Screen 5. Activity history: a searchable list of analysed events and outcomes. */
 import { useMemo, useState } from 'react';
 import { formatEthWithUnit, formatTimestamp } from '../lib/format';
 import { shortenAddress } from '../lib/address';

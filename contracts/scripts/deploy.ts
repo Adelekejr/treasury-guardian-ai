@@ -1,7 +1,7 @@
 /**
  * Deploys TreasuryGuardian to Arbitrum Sepolia (chain id 421614).
  *
- * There is no mainnet path: the script refuses to run against any other chain
+ * There is no mainnet path. The script refuses to run against any other chain
  * id, and every constructor argument comes from contracts/.env.
  */
 import { ethers, network } from 'hardhat';
@@ -48,7 +48,7 @@ async function main(): Promise<void> {
   const maxTransferWei = ethers.parseEther(maxTransferEth);
 
   const [deployer] = await ethers.getSigners();
-  if (!deployer) throw new Error('No signer available — set DEPLOYER_PRIVATE_KEY in contracts/.env');
+  if (!deployer) throw new Error('No signer available. Set DEPLOYER_PRIVATE_KEY in contracts/.env');
 
   console.log('Network         :', network.name, `(chain ${chainId})`);
   console.log('Deployer        :', deployer.address);

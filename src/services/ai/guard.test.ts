@@ -2,7 +2,7 @@
  * The AI cannot override policy. These tests are the proof.
  *
  * Each case feeds a hostile model response into the boundary and asserts that
- * the deterministic verdict is untouched — by value AND by object identity.
+ * the deterministic verdict is untouched, by value and by object identity.
  */
 import { describe, expect, it } from 'vitest';
 import { applyAiOutput } from './guard';

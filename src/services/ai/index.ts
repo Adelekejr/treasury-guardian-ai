@@ -1,4 +1,4 @@
-/** AI adapter factory. Mock by default; remote only when fully configured. */
+/** AI adapter factory. Mock by default, remote only when fully configured. */
 import { appConfig } from '../../config/env';
 import { createMockAiAdapter } from './mockAdapter';
 import { createRemoteAiAdapter } from './remoteAdapter';
@@ -14,19 +14,19 @@ export function selectAiAdapter(apiKey: string | null): AiAdapterSelection {
   if (appConfig.demoMode) {
     return {
       adapter: createMockAiAdapter(),
-      reason: 'Demo Mode is active — explanations come from the offline mock adapter.',
+      reason: 'Demo Mode is active. Explanations come from the offline mock adapter.',
     };
   }
   if (!appConfig.aiEndpoint) {
     return {
       adapter: createMockAiAdapter(),
-      reason: 'No AI endpoint configured — using the offline mock adapter.',
+      reason: 'No AI endpoint is configured, so the offline mock adapter is in use.',
     };
   }
   if (!apiKey) {
     return {
       adapter: createMockAiAdapter(),
-      reason: 'No session API key entered — using the offline mock adapter.',
+      reason: 'No session API key has been entered, so the offline mock adapter is in use.',
     };
   }
   return {

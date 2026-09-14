@@ -1,5 +1,6 @@
 /**
- * Header: one compact row — mark, name, network badge, wallet.
+ * Header. One compact row holding the mark, the name, the network badge and
+ * the wallet control.
  *
  * The tab strip lives under the header on wide screens and becomes a bottom
  * nav below 820px, so the header never eats the mobile viewport.
@@ -54,7 +55,7 @@ export function TopBar({ route }: { route: Route }): React.JSX.Element {
                 type="button"
                 className="chip chip--unknown mono chip--button"
                 onClick={() => void connect()}
-                title={`${wallet.address}${wrongNetwork ? ' — wrong network' : ''} · change wallet`}
+                title={`${wallet.address}${wrongNetwork ? ' · wrong network' : ''} · change wallet`}
               >
                 {shortenAddress(wallet.address, 4, 4)}
               </button>
