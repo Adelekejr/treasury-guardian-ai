@@ -20,6 +20,11 @@ implementation commit.
 | 11 | README, ARCHITECTURE.md, architecture diagram, deployment instructions | Done |
 | 12 | Production build + Vercel deploy config | `vercel.json` written, `npm run build` passes |
 
+## Routes
+
+`/` is the landing page (`src/landing/`), `/app` is the dashboard. One bundle,
+one rewrite rule.
+
 ## Where I am
 
 Last files worked on: the visual pass — `src/styles/tokens.css`,

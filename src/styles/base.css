@@ -221,6 +221,8 @@ code,
   gap: var(--s1);
 }
 .brand {
+  color: var(--ink);
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: var(--s1);

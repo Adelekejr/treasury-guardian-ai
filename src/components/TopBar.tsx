@@ -42,10 +42,10 @@ export function TopBar({ route }: { route: Route }): React.JSX.Element {
     <>
       <header className="topbar">
         <div className="topbar__inner">
-          <div className="brand">
+          <a className="brand" href="/" title="Back to the landing page">
             <span className="brand__mark">TG</span>
             <span>Treasury Guardian</span>
-          </div>
+          </a>
 
           <div className="topbar__right">
             <NetworkBadge />

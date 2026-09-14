@@ -106,6 +106,16 @@ src/
 contracts/     Solidity source, Hardhat tests, Arbitrum Sepolia deploy script
 ```
 
+### Routes
+
+| Path | What it is |
+|---|---|
+| `/` | Landing page — the claim, measured figures, the enforcement table and a live verdict object |
+| `/app` | The dashboard. Its own screens route in the hash, e.g. `/app#/history` |
+
+Both are served from one bundle; the host rewrites every path to `index.html`
+(see `vercel.json`).
+
 ### Screens
 
 1. **Treasury overview** — network status, wallet, balance, risk summary, policy status, activity.
