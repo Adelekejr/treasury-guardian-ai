@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ARBITRUM_SEPOLIA, FORBIDDEN_CHAINS, explorerAddressUrl } from '../config/network';
 import { formatEthWithUnit } from '../lib/format';
 import { Notice } from '../components/Notice';
-import { StateBanners } from '../components/StateBanners';
+import { StatusStrip } from '../components/StatusStrip';
 import { useApp } from '../state/useApp';
 import type { SimulatedState } from '../state/appContext';
 
@@ -36,7 +36,7 @@ export function SettingsAbout(): React.JSX.Element {
 
   return (
     <div className="stack stack--lg">
-      <StateBanners />
+      <StatusStrip />
 
       <div>
         <h1>Settings and about</h1>
@@ -74,7 +74,7 @@ export function SettingsAbout(): React.JSX.Element {
             {ARBITRUM_SEPOLIA.name} · id {ARBITRUM_SEPOLIA.id} · {ARBITRUM_SEPOLIA.hexId}
           </dd>
           <dt>Settles to</dt>
-          <dd>{ARBITRUM_SEPOLIA.settlesTo}</dd>
+          <dd className="prose">{ARBITRUM_SEPOLIA.settlesTo}</dd>
           <dt>Gas token</dt>
           <dd>{ARBITRUM_SEPOLIA.gasToken}</dd>
           <dt>RPC</dt>
@@ -106,7 +106,7 @@ export function SettingsAbout(): React.JSX.Element {
             )}
           </dd>
           <dt>Event polling</dt>
-          <dd>
+          <dd className="prose">
             every {config.pollIntervalMs} ms over {config.lookbackBlocks.toString()} blocks — the
             public Arbitrum RPC has no WebSocket, so the app polls getLogs
           </dd>
@@ -129,7 +129,7 @@ export function SettingsAbout(): React.JSX.Element {
             {policy.allowedRecipients.length > 0 ? policy.allowedRecipients.join(', ') : 'none configured'}
           </dd>
           <dt>Allowed methods</dt>
-          <dd>{policy.allowedMethods.join(', ')}</dd>
+          <dd>{policy.allowedMethods.join(' ')}</dd>
           <dt>Policy version</dt>
           <dd className="mono">{policy.version}</dd>
         </dl>

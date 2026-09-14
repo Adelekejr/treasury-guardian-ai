@@ -1,12 +1,12 @@
 /** Screen 3 — Agent analysis. The steps are visible, and their order matters. */
 import { useEffect } from 'react';
-import { RiskBadge, ProvenanceBadge } from '../components/Badges';
+import { RiskBadge, ProvenanceMark } from '../components/Badges';
 import { AgentSteps } from '../components/AgentSteps';
 import { AiExplanationPanel } from '../components/AiExplanationPanel';
 import { Notice } from '../components/Notice';
 import { PolicyChecklist } from '../components/PolicyChecklist';
 import { EmptyState } from '../components/Skeleton';
-import { StateBanners } from '../components/StateBanners';
+import { StatusStrip } from '../components/StatusStrip';
 import { isProposable } from '../services/policy/rules';
 import { useApp } from '../state/useApp';
 import { hrefFor, type Route } from '../state/router';
@@ -30,7 +30,7 @@ export function AgentAnalysis({
   if (!event || !assessment) {
     return (
       <div className="stack stack--lg">
-        <StateBanners />
+        <StatusStrip />
         <EmptyState
           title="Nothing to analyse"
           detail="This event is not in the current polling window."
@@ -44,7 +44,7 @@ export function AgentAnalysis({
 
   return (
     <div className="stack stack--lg">
-      <StateBanners />
+      <StatusStrip />
 
       <div className="row row--between">
         <div>
@@ -53,7 +53,7 @@ export function AgentAnalysis({
         </div>
         <div className="row">
           <RiskBadge verdict={assessment.verdict} />
-          <ProvenanceBadge provenance={event.provenance} />
+          <ProvenanceMark provenance={event.provenance} />
         </div>
       </div>
 

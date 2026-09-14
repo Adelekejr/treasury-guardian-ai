@@ -60,22 +60,22 @@ export function AiExplanationPanel({
     <div className="card stack">
       <div className="card__head">
         <h3>AI explanation</h3>
-        <span className="badge badge--unknown">Advisory only</span>
+        <span className="chip chip--unknown">Advisory only</span>
       </div>
 
-      <p>{explanation.summary}</p>
-      <p className="small muted">{explanation.rationale}</p>
+      <p className="prose">{explanation.summary}</p>
+      <p className="prose small muted">{explanation.rationale}</p>
 
       <dl className="kv">
         <dt>Advisory recommendation</dt>
-        <dd>
+        <dd className="prose">
           {RECOMMENDATION_WORD[explanation.recommendation] ?? explanation.recommendation}
           <span className="muted"> · policy verdict {verdictLabel(verdict)} governs</span>
         </dd>
         <dt>Provider</dt>
-        <dd>
+        <dd className="prose">
           {explanation.provider}
-          <div className="tiny muted">{adapterReason}</div>
+          <div className="tiny dim">{adapterReason}</div>
         </dd>
       </dl>
 
@@ -97,10 +97,10 @@ export function AiExplanationPanel({
         <h4 style={{ margin: 0, fontSize: 13 }} className="muted">
           Facts cited ({citedFacts.length})
         </h4>
-        <ul className="small" style={{ margin: 0, paddingLeft: 18 }}>
+        <ul className="small" style={{ margin: 0, paddingLeft: 16, display: 'flex', flexDirection: 'column', gap: 2 }}>
           {citedFacts.map((fact) => (
-            <li key={fact.id}>
-              <span className="muted">{fact.label}:</span> {fact.value}
+            <li key={fact.id} className="prose">
+              <span className="dim">{fact.label}:</span> <span className="mono">{fact.value}</span>
             </li>
           ))}
         </ul>

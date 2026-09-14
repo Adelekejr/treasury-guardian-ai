@@ -1,12 +1,21 @@
 /** The agent's visible steps. Order is the safety story: policy before AI. */
 import type { AgentStep, AgentStepState } from '../types';
+import { IconCheck, IconCross, IconDash, IconPending, IconRunning } from './Icons';
 
-const GLYPH: Record<AgentStepState, string> = {
-  PENDING: '○',
-  RUNNING: '◐',
-  DONE: '●',
-  FAILED: '✕',
-  SKIPPED: '–',
+const ICON: Record<AgentStepState, (props: { size?: number }) => React.JSX.Element> = {
+  PENDING: IconPending,
+  RUNNING: IconRunning,
+  DONE: IconCheck,
+  FAILED: IconCross,
+  SKIPPED: IconDash,
+};
+
+const COLOUR: Record<AgentStepState, string> = {
+  PENDING: 'var(--muted-dim)',
+  RUNNING: 'var(--lime)',
+  DONE: 'var(--lime)',
+  FAILED: 'var(--danger)',
+  SKIPPED: 'var(--muted-dim)',
 };
 
 const WORD: Record<AgentStepState, string> = {
@@ -20,19 +29,22 @@ const WORD: Record<AgentStepState, string> = {
 export function AgentSteps({ steps }: { steps: readonly AgentStep[] }): React.JSX.Element {
   return (
     <ol className="steps">
-      {steps.map((step) => (
-        <li key={step.id} className="step" data-state={step.state.toLowerCase()}>
-          <span className="step__glyph" aria-hidden="true">
-            {GLYPH[step.state]}
-          </span>
-          <div>
-            <p className="step__label">
-              {step.label} <span className="muted small">· {WORD[step.state]}</span>
-            </p>
-            <p className="step__detail">{step.detail}</p>
-          </div>
-        </li>
-      ))}
+      {steps.map((step) => {
+        const Icon = ICON[step.state];
+        return (
+          <li key={step.id} className="step" data-state={step.state.toLowerCase()}>
+            <span className="step__icon" style={{ color: COLOUR[step.state] }}>
+              <Icon size={15} />
+            </span>
+            <div>
+              <p className="step__label">
+                {step.label} <span className="dim tiny">· {WORD[step.state]}</span>
+              </p>
+              <p className="step__detail">{step.detail}</p>
+            </div>
+          </li>
+        );
+      })}
     </ol>
   );
 }

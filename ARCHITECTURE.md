@@ -42,7 +42,7 @@ The brief's layout maps onto a Vite project as follows.
 
 | Brief | Repository | Contains |
 |---|---|---|
-| `components/` | `src/components/` | Reusable UI: badges, notices, tables, skeletons, agent steps, banners |
+| `components/` | `src/components/` | Reusable UI: icons, risk chips, notices, tables, record cards, skeletons, agent steps, the status strip |
 | `views/` | `src/views/` | The six screens, composition only |
 | `services/` | `src/services/` | `wallet/`, `chain/`, `contract/`, `ai/`, plus `policy/` and `agent/` |
 | `types/` | `src/types/` | Shared domain types |
@@ -89,7 +89,7 @@ fallback when a live read throws `ChainUnavailableError`.
 
 - Every record a demo adapter produces carries `provenance: 'DEMO_FIXTURE'`.
 - The UI renders provenance on **every** event row and card, not only in
-  Settings, plus a persistent banner and a header badge.
+  Settings, as a quiet monospace mark, plus one chip in the status strip.
 - Fixtures are deterministic: a seeded PRNG and a fixed clock
   (`DEMO_CLOCK_SECONDS`), no `Math.random`, no `Date.now` at module scope. An
   ESLint rule blocks `Math.random`. Screenshots therefore do not drift.
@@ -166,6 +166,28 @@ recipient.
 app cannot be pointed at another network by configuration. `FORBIDDEN_CHAINS`
 names Ethereum mainnet, Arbitrum One and Arbitrum Nova in one place, used only
 to explain a refusal.
+
+## Visual system
+
+The interface is an instrument panel, not a marketing page:
+
+- **Surfaces lift in steps** on a near-black canvas — `--canvas #061512` →
+  `--surface-1 #0C2320` (card) → `--surface-2 #113029` (raised). The teal family
+  is an accent for borders, the network mark and emphasis, not the shell.
+- **Two type roles, no exceptions.** Plus Jakarta Sans for headings and prose;
+  JetBrains Mono with tabular figures for every piece of data — addresses,
+  amounts, timestamps, method names, chain ids, block numbers, hashes. Prose
+  inside a data slot opts back out with `.prose`.
+- **Density where data is, air between sections.** Table rows are 6px/12px;
+  sections are separated by 32px and introduced by a ruled heading.
+- **Lime is rare**: the primary action and the low-risk status only. Amber and
+  red are semantic. Risk carries an icon, a word and a colour, and each verdict
+  icon has a different silhouette so nothing depends on hue.
+- **Signal ranking.** One compact status line carries Demo Mode, wallet,
+  network and contract conditions and expands on demand, so the treasury
+  readout is above the fold on a phone. Provenance is quiet by design.
+- **Mobile is a first-class layout**: a 52px header (mark, network badge,
+  wallet icon), a bottom nav, and wide tables that become record cards.
 
 ## Testing strategy
 

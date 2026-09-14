@@ -9,11 +9,11 @@ import { useEffect, useState } from 'react';
 import { ARBITRUM_SEPOLIA, explorerTxUrl } from '../config/network';
 import { demoLabelFor } from '../data/demo.accounts';
 import { formatEthWithUnit, formatTimestamp } from '../lib/format';
-import { ProvenanceBadge, RiskBadge } from '../components/Badges';
+import { ProvenanceMark, RiskBadge } from '../components/Badges';
 import { Notice } from '../components/Notice';
 import { PolicyChecklist } from '../components/PolicyChecklist';
 import { EmptyState } from '../components/Skeleton';
-import { StateBanners } from '../components/StateBanners';
+import { StatusStrip } from '../components/StatusStrip';
 import { useApp } from '../state/useApp';
 import { hrefFor, type Route } from '../state/router';
 
@@ -57,7 +57,7 @@ export function ApprovalFlow({
   if (!event || !assessment) {
     return (
       <div className="stack stack--lg">
-        <StateBanners />
+        <StatusStrip />
         <EmptyState title="Nothing to approve" detail="This event is not in the current window." />
         <a className="btn btn--sm" href={hrefFor({ name: 'overview' })}>
           Back to overview
@@ -82,7 +82,7 @@ export function ApprovalFlow({
 
   return (
     <div className="stack stack--lg">
-      <StateBanners />
+      <StatusStrip />
 
       <div className="row row--between">
         <div>
@@ -91,7 +91,7 @@ export function ApprovalFlow({
         </div>
         <div className="row">
           <RiskBadge verdict={assessment.verdict} />
-          <ProvenanceBadge provenance={event.provenance} />
+          <ProvenanceMark provenance={event.provenance} />
         </div>
       </div>
 
@@ -102,7 +102,7 @@ export function ApprovalFlow({
       <section className="card stack" aria-label="Proposed action">
         <div className="card__head">
           <h2>Proposed action</h2>
-          <span className="small muted mono">{action?.id ?? '—'}</span>
+          <span className="prov">{action?.id ?? '—'}</span>
         </div>
         <dl className="kv">
           <dt>Chain</dt>
@@ -113,7 +113,7 @@ export function ApprovalFlow({
           <dd className="mono breakable">
             {action?.to ?? event.to ?? 'missing'}
             {demoLabelFor(action?.to ?? event.to) ? (
-              <div className="tiny muted">{demoLabelFor(action?.to ?? event.to)}</div>
+              <div className="tiny dim prose">{demoLabelFor(action?.to ?? event.to)}</div>
             ) : null}
           </dd>
           <dt>Value</dt>
@@ -123,7 +123,7 @@ export function ApprovalFlow({
           <dt>Decoded calldata</dt>
           <dd className="small breakable">{action?.calldataSummary ?? 'No action prepared.'}</dd>
           <dt>Reason</dt>
-          <dd className="small">{action?.reason ?? event.decodedSummary}</dd>
+          <dd className="small prose">{action?.reason ?? event.decodedSummary}</dd>
           <dt>Prepared at</dt>
           <dd>{formatTimestamp(action?.createdAt ?? null)}</dd>
         </dl>
@@ -145,7 +145,7 @@ export function ApprovalFlow({
             <dt>Decided by</dt>
             <dd className="mono breakable">{approval.decidedBy ?? 'unknown'}</dd>
             <dt>Note</dt>
-            <dd>{approval.note || '—'}</dd>
+            <dd className="prose">{approval.note || '—'}</dd>
             <dt>Transaction</dt>
             <dd className="mono breakable">
               {approval.txHash ? (
@@ -165,7 +165,7 @@ export function ApprovalFlow({
           <h3>Submission</h3>
           <ul className="stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: 6 }}>
             {submissionSteps.map((step) => (
-              <li key={step.id} className="small">
+              <li key={step.id} className="small prose">
                 <strong>{step.label}</strong> · {step.state} — {step.message}
                 {step.hash ? <div className="tiny mono breakable">{step.hash}</div> : null}
               </li>

@@ -4,9 +4,9 @@ import { formatEthWithUnit, formatTimestamp } from '../lib/format';
 import { shortenAddress } from '../lib/address';
 import { verdictLabel } from '../services/policy/rules';
 import type { RiskVerdict } from '../types';
-import { ProvenanceBadge, RiskBadge } from '../components/Badges';
+import { ProvenanceMark, RiskBadge } from '../components/Badges';
 import { EmptyState } from '../components/Skeleton';
-import { StateBanners } from '../components/StateBanners';
+import { StatusStrip } from '../components/StatusStrip';
 import { useApp } from '../state/useApp';
 import type { Route } from '../state/router';
 
@@ -53,7 +53,7 @@ export function ActivityHistory({ navigate }: { navigate: (route: Route) => void
 
   return (
     <div className="stack stack--lg">
-      <StateBanners />
+      <StatusStrip />
 
       <div>
         <h1>Activity history</h1>
@@ -121,24 +121,24 @@ export function ActivityHistory({ navigate }: { navigate: (route: Route) => void
                 <tr key={event.id}>
                   <td>{assessment ? <RiskBadge verdict={assessment.verdict} /> : '—'}</td>
                   <td className="cell-num">{formatTimestamp(event.timestamp)}</td>
-                  <td className="mono" title={event.to ?? ''}>
+                  <td title={event.to ?? ''}>
                     {shortenAddress(event.to)}
                   </td>
                   <td className="cell-num">{formatEthWithUnit(event.valueWei)}</td>
-                  <td className="small">
+                  <td className="small prose">
                     {run?.ai.status === 'READY'
                       ? run.ai.explanation?.recommendation.replace(/_/g, ' ').toLowerCase()
                       : run
                         ? 'unavailable'
                         : 'not analysed'}
                   </td>
-                  <td className="small">
+                  <td className="small prose">
                     {approval
                       ? `${approval.decision.toLowerCase()} · ${approval.status.replace(/_/g, ' ').toLowerCase()}`
                       : 'no decision'}
                   </td>
                   <td>
-                    <ProvenanceBadge provenance={event.provenance} />
+                    <ProvenanceMark provenance={event.provenance} />
                   </td>
                   <td>
                     <button
@@ -162,7 +162,7 @@ export function ActivityHistory({ navigate }: { navigate: (route: Route) => void
             <li key={event.id} className="record">
               <div className="record__top">
                 {assessment ? <RiskBadge verdict={assessment.verdict} /> : null}
-                <ProvenanceBadge provenance={event.provenance} />
+                <ProvenanceMark provenance={event.provenance} />
               </div>
               <dl className="record__grid">
                 <dt>Value</dt>
