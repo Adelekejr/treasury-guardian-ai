@@ -168,6 +168,14 @@ export function IconSettings({ size = 18, className }: IconProps): React.JSX.Ele
   );
 }
 
+export function IconX({ size = 14, className }: IconProps): React.JSX.Element {
+  return (
+    <svg {...svgProps(size)} className={className}>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
 export function IconChevron({ size = 14, className }: IconProps): React.JSX.Element {
   return (
     <svg {...svgProps(size)} className={className}>

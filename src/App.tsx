@@ -1,4 +1,5 @@
 import { TopBar } from './components/TopBar';
+import { WalletModal } from './components/WalletModal';
 import { ActivityHistory } from './views/ActivityHistory';
 import { AgentAnalysis } from './views/AgentAnalysis';
 import { ApprovalFlow } from './views/ApprovalFlow';
@@ -6,10 +7,13 @@ import { SettingsAbout } from './views/SettingsAbout';
 import { TransactionInspection } from './views/TransactionInspection';
 import { TreasuryOverview } from './views/TreasuryOverview';
 import { AppProvider } from './state/AppProvider';
+import { useApp } from './state/useApp';
 import { useRoute } from './state/router';
 
 function Screens(): React.JSX.Element {
   const { route, navigate } = useRoute();
+  const { walletModalOpen, detectedWallets, connectingWalletId, wallet, connectTo, closeWalletModal } =
+    useApp();
 
   return (
     <div className="app">
@@ -22,6 +26,14 @@ function Screens(): React.JSX.Element {
         {route.name === 'history' ? <ActivityHistory navigate={navigate} /> : null}
         {route.name === 'settings' ? <SettingsAbout /> : null}
       </main>
+      <WalletModal
+        open={walletModalOpen}
+        detected={detectedWallets}
+        connectingId={connectingWalletId}
+        error={wallet.error}
+        onSelect={(option) => void connectTo(option)}
+        onClose={closeWalletModal}
+      />
       <footer className="footer">
         Arbitrum Sepolia testnet prototype · deterministic policy in code, AI explanation only · not
         financial advice

@@ -11,7 +11,7 @@ import { arbitrumSepolia } from 'viem/chains';
 import type { AppConfig } from '../../config/env';
 import { SUPPORTED_CHAIN_ID } from '../../config/network';
 import type { ApprovalResult, ProposedAction } from '../../types';
-import { getInjectedProvider } from '../wallet/walletService';
+import { getActiveProvider } from '../wallet/walletService';
 import { TREASURY_GUARDIAN_ABI, methodTag } from './abi';
 
 export type SubmissionStepId = 'PROPOSE' | 'APPROVE' | 'EXECUTE';
@@ -147,8 +147,8 @@ export function createLiveContractService(config: AppConfig): ContractService {
     unavailableReason: null,
 
     async submitApproval(action, options) {
-      const provider = getInjectedProvider();
-      if (!provider) throw new Error('No browser wallet is connected.');
+      const provider = getActiveProvider();
+      if (!provider) throw new Error('No wallet is connected.');
       if (action.chainId !== SUPPORTED_CHAIN_ID) {
         throw new Error(`Refusing to submit on chain ${action.chainId}.`);
       }

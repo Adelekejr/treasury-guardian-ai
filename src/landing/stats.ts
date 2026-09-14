@@ -9,7 +9,7 @@
  *   states         -> counted from IMPLEMENTED_STATES below
  *   chainId        -> src/config/network.ts
  *
- * Last measured: 2026-09-14, commit 38ef598.
+ * Last measured: 2026-09-14, after the wallet picker landed.
  */
 import { SUPPORTED_CHAIN_ID } from '../config/network';
 
@@ -48,7 +48,7 @@ export const STATS: readonly LandingStat[] = [
     note: 'Hardhat, covering every allowlist limit and the approval boundary',
   },
   {
-    value: '41',
+    value: '47',
     label: 'frontend tests',
     note: 'Vitest, including proof a hostile model cannot change a verdict',
   },

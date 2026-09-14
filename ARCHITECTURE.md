@@ -112,6 +112,20 @@ the list of `ObservedFact`s — the only evidence the model is allowed to cite.
 Severity ordering is explicit: `BLOCKED` > `REVIEW_REQUIRED` >
 `INSUFFICIENT_DATA` > `LOW_RISK`, and the most severe failing rule wins.
 
+### 3b. Wallet boundary — `src/services/wallet/`
+
+`eip6963.ts` keeps a live registry of wallets that answered
+`eip6963:requestProvider`; `catalog.ts` turns that registry into the rows the
+picker renders, always including MetaMask, Bitget Wallet and Rabby whether or
+not they are installed. `walletService.ts` holds the ONE provider the human
+chose, so later chain reads, switch requests and contract writes all address
+that same wallet rather than whichever one last claimed `window.ethereum`
+(which is used only as a fallback when nothing announces itself).
+
+The chain guard sits outside this module: a connection reports whatever chain
+the wallet is on, and `NetworkStatus` turns anything that is not 421614 into
+`WRONG_NETWORK`. Nothing rewrites a chain id to look supported.
+
 ### 4. AI boundary — `src/services/ai/`
 
 ```
@@ -203,6 +217,7 @@ The interface is an instrument panel, not a marketing page:
 | AI boundary | `src/services/ai/guard.test.ts` | A hostile model cannot change a verdict |
 | AI schema | `src/services/ai/schema.test.ts` | Malformed and invented output is rejected |
 | Fixtures | `src/data/demo.fixtures.test.ts` | Determinism, provenance, every verdict reachable |
+| Wallet | `src/services/wallet/catalog.test.ts` | Every known wallet is always listed; detected wallets are marked and never duplicated |
 | Config | `src/config/env.test.ts` | Refusal of other chain ids, safe fallbacks |
 | Formatting | `src/lib/format.test.ts` | Exact wei arithmetic, fixed UTC timestamps |
 | Contract | `contracts/test/TreasuryGuardian.test.ts` | The approval boundary and every allowlist limit |

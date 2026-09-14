@@ -1,16 +1,22 @@
 /**
- * Wallet adapter (EIP-1193 injected provider).
+ * Wallet adapter.
  *
- * The app will only operate on Arbitrum Sepolia: `connect` reports the chain
- * id it finds, and every caller must treat anything other than 421614 as the
- * wrong-network state. No private key is ever requested, read or stored.
+ * The app talks to ONE selected EIP-1193 provider, chosen in the wallet modal
+ * from the wallets that announced themselves over EIP-6963. That choice is held
+ * here so every later call — chain reads, switch requests, contract writes —
+ * goes to the same wallet instead of whichever one last claimed
+ * `window.ethereum`.
+ *
+ * No private key is ever requested, read or stored.
  */
 import { ARBITRUM_SEPOLIA, SUPPORTED_CHAIN_ID } from '../../config/network';
 import type { Eip1193Provider } from '../../types/eip1193';
+import { legacyInjectedProvider, type Eip6963ProviderDetail } from './eip6963';
 
 export interface WalletConnection {
   readonly address: string;
   readonly chainId: number;
+  readonly walletName: string;
 }
 
 export class WalletError extends Error {
@@ -20,13 +26,27 @@ export class WalletError extends Error {
   }
 }
 
-export function getInjectedProvider(): Eip1193Provider | null {
-  if (typeof window === 'undefined') return null;
-  return window.ethereum ?? null;
+let active: Eip6963ProviderDetail | null = null;
+
+export function setActiveWallet(detail: Eip6963ProviderDetail | null): void {
+  active = detail;
+}
+
+export function getActiveWallet(): Eip6963ProviderDetail | null {
+  return active;
+}
+
+/**
+ * The provider the app should use: the one the human picked, or the legacy
+ * `window.ethereum` when nothing has been picked yet.
+ */
+export function getActiveProvider(): Eip1193Provider | null {
+  if (active) return active.provider;
+  return legacyInjectedProvider()?.provider ?? null;
 }
 
 export function hasInjectedWallet(): boolean {
-  return getInjectedProvider() !== null;
+  return getActiveProvider() !== null;
 }
 
 function parseChainId(value: unknown): number {
@@ -35,8 +55,17 @@ function parseChainId(value: unknown): number {
   throw new WalletError('Wallet returned an unreadable chain id.');
 }
 
+/** Turns a provider rejection into something worth showing a human. */
+export function describeWalletError(error: unknown): string {
+  const code = (error as { code?: number })?.code;
+  if (code === 4001) return 'Connection request rejected in the wallet.';
+  if (code === -32002) return 'A connection request is already open — check the wallet window.';
+  const message = error instanceof Error ? error.message : String(error);
+  return message || 'The wallet did not respond.';
+}
+
 export async function getChainId(): Promise<number | null> {
-  const provider = getInjectedProvider();
+  const provider = getActiveProvider();
   if (!provider) return null;
   try {
     return parseChainId(await provider.request({ method: 'eth_chainId' }));
@@ -46,7 +75,7 @@ export async function getChainId(): Promise<number | null> {
 }
 
 export async function getConnectedAccounts(): Promise<readonly string[]> {
-  const provider = getInjectedProvider();
+  const provider = getActiveProvider();
   if (!provider) return [];
   try {
     const accounts = await provider.request({ method: 'eth_accounts' });
@@ -56,27 +85,32 @@ export async function getConnectedAccounts(): Promise<readonly string[]> {
   }
 }
 
-export async function connectWallet(): Promise<WalletConnection> {
-  const provider = getInjectedProvider();
-  if (!provider) {
-    throw new WalletError('No browser wallet found. Install an EIP-1193 wallet to continue.');
+/**
+ * Connect to one specific announced wallet. The caller decides which; this
+ * never guesses, and never falls back to a different provider on failure.
+ */
+export async function connectWithProvider(detail: Eip6963ProviderDetail): Promise<WalletConnection> {
+  const { provider, info } = detail;
+  if (typeof provider?.request !== 'function') {
+    throw new WalletError(`${info.name} did not expose an EIP-1193 provider.`);
   }
 
   const accounts = await provider.request({ method: 'eth_requestAccounts' });
   const address = Array.isArray(accounts) ? (accounts[0] as string | undefined) : undefined;
-  if (!address) throw new WalletError('The wallet returned no account.');
+  if (!address) throw new WalletError(`${info.name} returned no account.`);
 
   const chainId = parseChainId(await provider.request({ method: 'eth_chainId' }));
-  return { address, chainId };
+  setActiveWallet(detail);
+  return { address, chainId, walletName: info.name };
 }
 
 /**
- * Ask the wallet to switch to Arbitrum Sepolia, adding it with the verified
- * public parameters if the wallet does not know it yet.
+ * Ask the connected wallet to switch to Arbitrum Sepolia, adding it with the
+ * verified public parameters if the wallet does not know it yet.
  */
 export async function switchToArbitrumSepolia(): Promise<void> {
-  const provider = getInjectedProvider();
-  if (!provider) throw new WalletError('No browser wallet found.');
+  const provider = getActiveProvider();
+  if (!provider) throw new WalletError('No wallet is connected.');
 
   try {
     await provider.request({
@@ -106,12 +140,12 @@ export function isSupportedWalletChain(chainId: number | null): boolean {
   return chainId === SUPPORTED_CHAIN_ID;
 }
 
-/** Subscribe to wallet events. Returns an unsubscribe function. */
+/** Subscribe to the active wallet's events. Returns an unsubscribe function. */
 export function subscribeToWallet(handlers: {
   onAccountsChanged?: (accounts: readonly string[]) => void;
   onChainChanged?: (chainId: number) => void;
 }): () => void {
-  const provider = getInjectedProvider();
+  const provider = getActiveProvider();
   if (!provider?.on || !provider.removeListener) return () => {};
 
   const accountsListener = (...args: never[]): void => {
