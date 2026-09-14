@@ -17,7 +17,8 @@ interface StatusItem {
   readonly title: string;
   readonly detail: string;
   readonly icon: React.JSX.Element;
-  readonly action?: { readonly label: string; readonly run: () => void };
+  /** `short` is the label used for the inline button on the status line. */
+  readonly action?: { readonly label: string; readonly short: string; readonly run: () => void };
 }
 
 const CHIP_CLASS: Record<Tone, string> = {
@@ -61,7 +62,11 @@ export function StatusStrip(): React.JSX.Element | null {
       title: `This app only operates on ${ARBITRUM_SEPOLIA.name}.`,
       detail: `${network.message} Chain ${ARBITRUM_SEPOLIA.id} is the only supported target; nothing can be prepared or approved from another chain.`,
       icon: <IconBlocked size={13} />,
-      action: { label: `Switch to ${ARBITRUM_SEPOLIA.name}`, run: () => void switchNetwork() },
+      action: {
+        label: `Switch to ${ARBITRUM_SEPOLIA.name}`,
+        short: 'Switch network',
+        run: () => void switchNetwork(),
+      },
     });
   }
 
@@ -88,7 +93,7 @@ export function StatusStrip(): React.JSX.Element | null {
           : 'No browser wallet was detected. You can still read everything on this screen.'
       }${wallet.error ? ` ${wallet.error}` : ''}`,
       icon: <IconWallet size={13} />,
-      ...(wallet.available ? { action: { label: 'Connect wallet', run: () => void connect() } } : {}),
+      action: { label: 'Choose a wallet', short: 'Connect', run: () => void connect() },
     });
   }
 
@@ -105,27 +110,37 @@ export function StatusStrip(): React.JSX.Element | null {
 
   if (items.length === 0) return null;
 
+  // The most severe item's action is reachable without expanding anything.
+  const primaryAction = items.find((item) => item.action)?.action ?? null;
+
   return (
     <div className="statusline">
-      <button
-        type="button"
-        className="statusline__row"
-        aria-expanded={open}
-        onClick={() => setOpen((previous) => !previous)}
-      >
-        <span className="statusline__chips">
-          {items.map((item) => (
-            <span key={item.id} className={`chip ${CHIP_CLASS[item.tone]}`}>
-              {item.icon}
-              {item.chip}
-            </span>
-          ))}
-        </span>
-        <span className="statusline__more">
-          {open ? 'Hide' : 'Details'}
-          <IconChevron size={12} />
-        </span>
-      </button>
+      <div className="statusline__row">
+        <button
+          type="button"
+          className="statusline__toggle"
+          aria-expanded={open}
+          onClick={() => setOpen((previous) => !previous)}
+        >
+          <span className="statusline__chips">
+            {items.map((item) => (
+              <span key={item.id} className={`chip ${CHIP_CLASS[item.tone]}`}>
+                {item.icon}
+                {item.chip}
+              </span>
+            ))}
+          </span>
+          <span className="statusline__more">
+            {open ? 'Hide' : 'Details'}
+            <IconChevron size={12} />
+          </span>
+        </button>
+        {primaryAction ? (
+          <button type="button" className="btn btn--sm" onClick={primaryAction.run}>
+            {primaryAction.short}
+          </button>
+        ) : null}
+      </div>
 
       {open ? (
         <div className="statusline__detail">

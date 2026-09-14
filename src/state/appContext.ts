@@ -5,6 +5,8 @@
  * component (and fast refresh stays happy).
  */
 import { createContext } from 'react';
+import type { Eip6963ProviderDetail } from '../services/wallet/eip6963';
+import type { WalletOption } from '../services/wallet/catalog';
 import type { AppConfig } from '../config/env';
 import type { PolicyConfig } from '../config/policy';
 import type { SubmissionStep } from '../services/contract/guardianService';
@@ -61,13 +63,21 @@ export interface AppContextValue {
   readonly contractAvailable: boolean;
   readonly contractReason: string | null;
   readonly simulated: SimulatedState;
+  /** Wallet picker state — see components/WalletModal.tsx. */
+  readonly walletModalOpen: boolean;
+  readonly detectedWallets: readonly Eip6963ProviderDetail[];
+  readonly connectingWalletId: string | null;
+  readonly activeWalletName: string | null;
   readonly nowSeconds: () => number;
   refresh(): Promise<void>;
   analyse(eventId: string): Promise<void>;
   prepare(eventId: string): ProposedAction | null;
   approve(eventId: string, note: string): Promise<void>;
   reject(eventId: string, note: string): Promise<void>;
+  /** Opens the wallet picker. Never connects on its own. */
   connect(): Promise<void>;
+  connectTo(option: WalletOption): Promise<void>;
+  closeWalletModal(): void;
   switchNetwork(): Promise<void>;
   setAiKey(key: string | null): void;
   setSimulated(state: SimulatedState): void;

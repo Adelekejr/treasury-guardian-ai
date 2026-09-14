@@ -31,13 +31,22 @@ import type { AiAdapter } from '../services/ai';
 import { runAgentAnalysis } from '../services/agent/agentRunner';
 import { assessEvent, isProposable } from '../services/policy/rules';
 import {
-  connectWallet,
+  connectWithProvider,
+  describeWalletError,
+  getActiveWallet,
   getChainId,
   getConnectedAccounts,
   hasInjectedWallet,
   subscribeToWallet,
   switchToArbitrumSepolia,
 } from '../services/wallet/walletService';
+import {
+  discoveredProviders,
+  requestProviders,
+  subscribeToProviders,
+  type Eip6963ProviderDetail,
+} from '../services/wallet/eip6963';
+import type { WalletOption } from '../services/wallet/catalog';
 import type {
   AgentRun,
   ApprovalResult,
@@ -109,6 +118,11 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [aiKey, setAiKeyState] = useState<string | null>(null);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [detectedWallets, setDetectedWallets] = useState<readonly Eip6963ProviderDetail[]>([]);
+  const [connectingWalletId, setConnectingWalletId] = useState<string | null>(null);
+  /** Changes when the selected wallet changes, so event listeners re-attach. */
+  const [walletKey, setWalletKey] = useState<string>('none');
   const [wallet, setWallet] = useState<WalletState>({
     address: null,
     chainId: null,
@@ -230,9 +244,12 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
       if (cancelled) return;
       setWallet((previous) => ({
         ...previous,
-        address: accounts[0] ?? null,
-        chainId,
-        available: hasInjectedWallet(),
+        // Only ever restores a connection. Disconnection arrives through the
+        // accountsChanged event, so a momentary empty read cannot wipe the
+        // wallet the human just picked.
+        address: accounts[0] ?? previous.address,
+        chainId: chainId ?? previous.chainId,
+        available: previous.available || hasInjectedWallet(),
       }));
     })();
 
@@ -244,6 +261,24 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
 
     return () => {
       cancelled = true;
+      unsubscribe();
+    };
+  }, [walletKey]);
+
+  // EIP-6963 discovery. Wallets answer the request event whenever they are
+  // ready, so this stays subscribed rather than sampling once.
+  useEffect(() => {
+    const unsubscribe = subscribeToProviders(() => {
+      // discoveredProviders() returns the announced wallets, or the legacy
+      // window.ethereum provider when nothing announced itself.
+      const details = discoveredProviders();
+      setDetectedWallets(details);
+      setWallet((previous) => ({ ...previous, available: details.length > 0 }));
+    });
+    requestProviders();
+    const retry = setTimeout(requestProviders, 400);
+    return () => {
+      clearTimeout(retry);
       unsubscribe();
     };
   }, []);
@@ -368,10 +403,30 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
     [contractService, nowSeconds, prepare, proposals, wallet.address],
   );
 
+  /** Connect always opens the picker — it never guesses which wallet to use. */
   const connect = useCallback(async () => {
+    requestProviders();
+    setWallet((previous) => ({ ...previous, error: null }));
+    setWalletModalOpen(true);
+  }, []);
+
+  const closeWalletModal = useCallback(() => {
+    setWalletModalOpen(false);
+    setConnectingWalletId(null);
+  }, []);
+
+  /**
+   * Connect to the wallet the human picked. The chain guard is not applied
+   * here: whatever chain comes back is recorded as-is, and the network status
+   * turns it into the wrong-network state. Another chain is never accepted
+   * silently, and never rewritten to look supported.
+   */
+  const connectTo = useCallback(async (option: WalletOption) => {
+    if (!option.detail) return;
+    setConnectingWalletId(option.id);
     setWallet((previous) => ({ ...previous, connecting: true, error: null }));
     try {
-      const connection = await connectWallet();
+      const connection = await connectWithProvider(option.detail);
       setWallet({
         address: connection.address,
         chainId: connection.chainId,
@@ -379,12 +434,16 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
         error: null,
         available: true,
       });
+      setWalletKey(connection.walletName + connection.address);
+      setWalletModalOpen(false);
     } catch (error) {
       setWallet((previous) => ({
         ...previous,
         connecting: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: describeWalletError(error),
       }));
+    } finally {
+      setConnectingWalletId(null);
     }
   }, []);
 
@@ -433,6 +492,10 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
     contractAvailable: contractService.available,
     contractReason: contractService.unavailableReason,
     simulated,
+    walletModalOpen,
+    detectedWallets,
+    connectingWalletId,
+    activeWalletName: getActiveWallet()?.info.name ?? null,
     nowSeconds,
     refresh,
     analyse,
@@ -440,6 +503,8 @@ export function AppProvider({ children }: { children: ReactNode }): React.JSX.El
     approve,
     reject,
     connect,
+    connectTo,
+    closeWalletModal,
     switchNetwork,
     setAiKey,
     setSimulated,

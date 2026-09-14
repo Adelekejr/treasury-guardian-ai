@@ -50,12 +50,14 @@ export function TopBar({ route }: { route: Route }): React.JSX.Element {
           <div className="topbar__right">
             <NetworkBadge />
             {wallet.address ? (
-              <span
-                className="chip chip--unknown mono"
-                title={`${wallet.address}${wrongNetwork ? ' — wrong network' : ''}`}
+              <button
+                type="button"
+                className="chip chip--unknown mono chip--button"
+                onClick={() => void connect()}
+                title={`${wallet.address}${wrongNetwork ? ' — wrong network' : ''} · change wallet`}
               >
                 {shortenAddress(wallet.address, 4, 4)}
-              </span>
+              </button>
             ) : (
               <button
                 type="button"

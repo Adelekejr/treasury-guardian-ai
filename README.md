@@ -58,7 +58,7 @@ wallet needed, nothing broadcast.
 | `npm run dev` | Vite dev server |
 | `npm run build` | Type-check (`tsc -b`) then production build |
 | `npm run preview` | Serve the production build locally |
-| `npm test` | Frontend unit tests (Vitest) |
+| `npm test` | Frontend unit tests (Vitest, 47) |
 | `npm run test:contracts` | Hardhat contract tests |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript, no emit |
@@ -115,6 +115,26 @@ contracts/     Solidity source, Hardhat tests, Arbitrum Sepolia deploy script
 
 Both are served from one bundle; the host rewrites every path to `index.html`
 (see `vercel.json`).
+
+### Connecting a wallet
+
+Connect always opens a wallet picker — it never guesses which wallet to use.
+
+- Wallets are discovered with **EIP-6963** (`eip6963:requestProvider`), so every
+  installed wallet is listed separately instead of fighting over
+  `window.ethereum`. That legacy provider is used only if nothing announces
+  itself.
+- MetaMask, Bitget Wallet and Rabby are always listed. Installed ones are marked
+  **Detected** and connect on click, showing the icon the wallet announces.
+  Missing ones stay visible as **Not installed** and link to their official
+  download page — never hidden, never dropped.
+- Any other wallet that announces itself is listed as its own row.
+- With no wallet at all the dialog still opens and explains what to install.
+- A **WalletConnect** slot is reserved and visibly inert: enabling it needs a
+  project id this deployment does not have.
+- After connecting, the chain guard applies. A wallet on any chain other than
+  421614 puts the app in its wrong-network state with a switch request; another
+  chain is never silently accepted.
 
 ### Screens
 
