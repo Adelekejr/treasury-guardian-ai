@@ -3,11 +3,11 @@ import { ARBITRUM_SEPOLIA, explorerTxUrl } from '../config/network';
 import { demoLabelFor } from '../data/demo.accounts';
 import { formatEthWithUnit, formatTimestamp } from '../lib/format';
 import { isProposable } from '../services/policy/rules';
-import { ProvenanceBadge, RiskBadge } from '../components/Badges';
+import { ProvenanceMark, RiskBadge } from '../components/Badges';
 import { Notice } from '../components/Notice';
 import { PolicyChecklist } from '../components/PolicyChecklist';
 import { EmptyState } from '../components/Skeleton';
-import { StateBanners } from '../components/StateBanners';
+import { StatusStrip } from '../components/StatusStrip';
 import { useApp } from '../state/useApp';
 import { hrefFor, type Route } from '../state/router';
 
@@ -25,7 +25,7 @@ export function TransactionInspection({
   if (!event || !assessment) {
     return (
       <div className="stack stack--lg">
-        <StateBanners />
+        <StatusStrip />
         <EmptyState
           title="That transaction is not in this session"
           detail="It may have scrolled out of the polling window. Go back to the overview and pick another."
@@ -42,16 +42,16 @@ export function TransactionInspection({
 
   return (
     <div className="stack stack--lg">
-      <StateBanners />
+      <StatusStrip />
 
       <div className="row row--between">
         <div>
           <h1>Transaction inspection</h1>
-          <p className="muted small mono">{event.id}</p>
+          <p className="prov">{event.id}</p>
         </div>
         <div className="row">
           <RiskBadge verdict={assessment.verdict} />
-          <ProvenanceBadge provenance={event.provenance} />
+          <ProvenanceMark provenance={event.provenance} />
         </div>
       </div>
 
@@ -66,7 +66,7 @@ export function TransactionInspection({
           <dt>Recipient</dt>
           <dd className="mono breakable">
             {event.to ?? 'missing'}
-            {recipientLabel ? <div className="tiny muted mono">{recipientLabel}</div> : null}
+            {recipientLabel ? <div className="tiny dim prose">{recipientLabel}</div> : null}
           </dd>
           <dt>Sender</dt>
           <dd className="mono breakable">{event.from ?? 'unknown'}</dd>
@@ -96,21 +96,23 @@ export function TransactionInspection({
           </dd>
           <dt>Source</dt>
           <dd>
-            <ProvenanceBadge provenance={event.provenance} />
+            <ProvenanceMark provenance={event.provenance} />
           </dd>
           <dt>Decoded action</dt>
-          <dd>{event.decodedSummary}</dd>
+          <dd className="prose">{event.decodedSummary}</dd>
         </dl>
       </section>
 
       <section className="card stack" aria-label="Risk reasons">
         <div className="card__head">
           <h2>Why this verdict</h2>
-          <span className="small muted mono">{assessment.policyVersion}</span>
+          <span className="prov">{assessment.policyVersion}</span>
         </div>
-        <ul className="stack" style={{ margin: 0, paddingLeft: 18, gap: 4 }}>
+        <ul className="stack" style={{ margin: 0, paddingLeft: 16, gap: 4 }}>
           {assessment.reasons.map((reason) => (
-            <li key={reason}>{reason}</li>
+            <li key={reason} className="prose">
+              {reason}
+            </li>
           ))}
         </ul>
       </section>

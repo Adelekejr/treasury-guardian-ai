@@ -1,64 +1,70 @@
 /**
- * Small labelling components.
+ * Status marks.
  *
- * Every risk signal carries a text label AND a monospace glyph as well as its
- * colour, so the screens stay readable in greyscale.
+ * Risk always carries an icon with a distinct silhouette, the word, and a
+ * colour — it survives greyscale. Provenance is not a warning, so it renders
+ * as quiet monospace text with a small dot, never as a coloured pill.
  */
 import type { Provenance, RiskVerdict } from '../types';
 import { ARBITRUM_SEPOLIA } from '../config/network';
-import { verdictGlyph, verdictLabel } from '../services/policy/rules';
+import { verdictLabel } from '../services/policy/rules';
+import { IconBlocked, IconLow, IconReview, IconUnknown, type IconProps } from './Icons';
 
 export function NetworkBadge(): React.JSX.Element {
   return (
-    <span className="badge badge--network" title={`Chain id ${ARBITRUM_SEPOLIA.id}`}>
-      <span className="badge__glyph" aria-hidden="true">
-        ◆
-      </span>
+    <span className="chip chip--network" title={`Chain id ${ARBITRUM_SEPOLIA.id}`}>
       ARBITRUM SEPOLIA
     </span>
   );
 }
 
-export function ProvenanceBadge({ provenance }: { provenance: Provenance }): React.JSX.Element {
-  const demo = provenance === 'DEMO_FIXTURE';
-  return (
-    <span
-      className={`badge ${demo ? 'badge--demo' : 'badge--onchain'}`}
-      title={demo ? 'Deterministic demo fixture — not read from the chain' : 'Read from Arbitrum Sepolia'}
-    >
-      <span className="badge__glyph" aria-hidden="true">
-        {demo ? '⌗' : '⛓'}
-      </span>
-      {demo ? 'Demo fixture' : 'On-chain'}
-    </span>
-  );
-}
+const VERDICT_ICON: Record<RiskVerdict, (props: IconProps) => React.JSX.Element> = {
+  LOW_RISK: IconLow,
+  REVIEW_REQUIRED: IconReview,
+  BLOCKED: IconBlocked,
+  INSUFFICIENT_DATA: IconUnknown,
+};
 
 const VERDICT_CLASS: Record<RiskVerdict, string> = {
-  LOW_RISK: 'badge--low',
-  REVIEW_REQUIRED: 'badge--review',
-  BLOCKED: 'badge--blocked',
-  INSUFFICIENT_DATA: 'badge--unknown',
+  LOW_RISK: 'chip--low',
+  REVIEW_REQUIRED: 'chip--review',
+  BLOCKED: 'chip--blocked',
+  INSUFFICIENT_DATA: 'chip--unknown',
 };
+
+export function RiskIcon({ verdict, size = 14 }: { verdict: RiskVerdict; size?: number }): React.JSX.Element {
+  const Icon = VERDICT_ICON[verdict];
+  return <Icon size={size} />;
+}
 
 export function RiskBadge({ verdict }: { verdict: RiskVerdict }): React.JSX.Element {
   return (
-    <span className={`badge ${VERDICT_CLASS[verdict]}`}>
-      <span className="badge__glyph" aria-hidden="true">
-        {verdictGlyph(verdict)}
-      </span>
+    <span className={`chip ${VERDICT_CLASS[verdict]}`}>
+      <RiskIcon verdict={verdict} />
       {verdictLabel(verdict)}
     </span>
   );
 }
 
-export function DemoModeBadge(): React.JSX.Element {
+/**
+ * Provenance, rendered on every event as required — quietly.
+ * `compact` drops the word and keeps the dot plus a tooltip.
+ */
+export function ProvenanceMark({
+  provenance,
+  compact = false,
+}: {
+  provenance: Provenance;
+  compact?: boolean;
+}): React.JSX.Element {
+  const demo = provenance === 'DEMO_FIXTURE';
+  const title = demo
+    ? 'Demo fixture — deterministic sample data, not read from the chain'
+    : 'Read from Arbitrum Sepolia';
   return (
-    <span className="badge badge--demo" title="Demo Mode is active — no RPC calls, no funds can move">
-      <span className="badge__glyph" aria-hidden="true">
-        ⌗
-      </span>
-      Demo Mode
+    <span className="prov" title={title}>
+      <span className={`prov__dot ${demo ? 'prov__dot--demo' : 'prov__dot--onchain'}`} />
+      {compact ? <span className="sr-only">{demo ? 'demo fixture' : 'on-chain'}</span> : demo ? 'demo' : 'on-chain'}
     </span>
   );
 }

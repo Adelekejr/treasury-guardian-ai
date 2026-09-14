@@ -267,8 +267,11 @@ gitignored, and it must be a throwaway testnet key. The script prints the
   this repository was invented.
 - A transaction hash is only ever shown when it came from a real receipt. In
   Demo Mode the app states plainly that nothing was broadcast.
-- Risk is expressed through text, label, glyph **and** colour, so the screens
-  survive a greyscale test.
+- Risk is expressed through text, label, icon silhouette **and** colour — the
+  four verdicts use a filled octagon, an outlined triangle, a dashed circle and
+  a shield, so the screens survive a greyscale test.
+- Provenance is shown on every event, as quiet monospace text rather than a
+  warning-coloured pill: it is a fact about the data source, not an alert.
 
 ## Licence
 

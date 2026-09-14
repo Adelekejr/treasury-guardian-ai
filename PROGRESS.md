@@ -22,11 +22,13 @@ implementation commit.
 
 ## Where I am
 
-Last files worked on: `README.md` and `ARCHITECTURE.md` (step 11), after
-`src/components/EventTable.tsx` and `src/styles/base.css` — where wide tables
-collapse to record cards below 720px and any event not on chain 421614 carries
-a foreign-chain warning. All of it is committed, rebuilt and verified in a
-headless browser.
+Last files worked on: the visual pass — `src/styles/tokens.css`,
+`src/styles/base.css`, `src/components/Icons.tsx`, `StatusStrip.tsx`,
+`TopBar.tsx`, `Badges.tsx` and `TreasuryOverview.tsx`. Near-black canvas with a
+surface lift scale, real risk icons, one compact status line, a 52px header
+with a bottom nav on mobile, quiet provenance marks and a strict
+mono-for-data / sans-for-prose rule. All of it is committed, rebuilt and
+verified in a headless browser at 390px and 1280px, in colour and greyscale.
 
 Verified in this session:
 - `npm run build` succeeds; `tsc -b` reports zero errors; `eslint .` is clean.
