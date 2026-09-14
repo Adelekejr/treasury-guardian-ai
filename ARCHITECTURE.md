@@ -49,6 +49,12 @@ The brief's layout maps onto a Vite project as follows.
 | `data/` | `src/data/` | `demo.*` deterministic fixtures |
 | `contracts/` | `contracts/` | Solidity, Hardhat tests, deploy script |
 
+The landing page lives in `src/landing/`. It is part of the same bundle:
+`src/main.tsx` renders it for `/` and the dashboard for `/app`. Every figure it
+shows is measured from the repository (`src/landing/stats.ts` records how), and
+the verdict object in its evidence section is produced at load time by the real
+policy engine rather than transcribed.
+
 Supporting directories: `src/config/` (verified network facts, environment and
 policy configuration), `src/lib/` (address and formatting helpers with no chain
 dependency), `src/state/` (one provider, one hash router).
