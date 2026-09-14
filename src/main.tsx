@@ -10,7 +10,7 @@ if (!container) throw new Error('Root container is missing from index.html.');
 /**
  * Two entry points on one bundle: the landing page at "/" and the dashboard at
  * "/app" (its own screens continue to route in the hash, e.g. /app#/history).
- * The host rewrites every path to index.html — see vercel.json.
+ * The host rewrites every path to index.html. See vercel.json.
  */
 const path = window.location.pathname.replace(/\/+$/, '');
 const isDashboard = path === '/app' || path.startsWith('/app/');

@@ -1,6 +1,6 @@
 /**
  * One compact status line instead of stacked banners, so the treasury data is
- * the first thing on screen. Each condition is a chip; tapping the line
+ * the first thing on screen. Each condition gets a chip. Tapping the line
  * expands the full explanation and any action it offers.
  */
 import { useState } from 'react';
@@ -48,7 +48,7 @@ export function StatusStrip(): React.JSX.Element | null {
       id: 'demo',
       tone: 'warn',
       chip: 'Demo Mode',
-      title: 'Demo Mode is active — every figure on screen is a fixture.',
+      title: 'Demo Mode is active. Every figure on screen is a fixture.',
       detail: `${demoReason ?? ''} No RPC call is made, no transaction is broadcast, and no funds can move.`,
       icon: <IconReview size={13} />,
     });
@@ -86,7 +86,7 @@ export function StatusStrip(): React.JSX.Element | null {
       id: 'wallet',
       tone: 'muted',
       chip: 'No wallet',
-      title: 'Wallet not connected — monitoring only.',
+      title: 'Wallet not connected. Monitoring only.',
       detail: `${
         wallet.available
           ? 'Connect a wallet to prepare or approve a testnet action. Reading does not need one.'

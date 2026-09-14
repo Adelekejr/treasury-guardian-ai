@@ -1,7 +1,7 @@
 /**
  * Deterministic policy engine.
  *
- * This is the only place a risk verdict is produced. It runs BEFORE any AI
+ * This is the only place a risk verdict is produced. It runs before any AI
  * call, takes no model input, performs no I/O and has no randomness, so the
  * same event always yields the same verdict.
  *
@@ -52,7 +52,7 @@ export function verdictLabel(verdict: RiskVerdict): string {
   }
 }
 
-/** Text + glyph so risk survives a greyscale test without relying on colour. */
+/** Short text form of a verdict, for places that cannot render an icon. */
 export function verdictGlyph(verdict: RiskVerdict): string {
   switch (verdict) {
     case 'LOW_RISK':
@@ -109,7 +109,7 @@ function collectFacts(action: AssessableAction, policy: PolicyConfig): ObservedF
 
 /**
  * Evaluate one action or event. `evaluatedAt` is injected so results stay
- * deterministic in tests and screenshots.
+ * deterministic in tests and in screenshots.
  */
 export function assessAction(
   action: AssessableAction,
@@ -131,7 +131,7 @@ export function assessAction(
     status: dataComplete ? 'PASS' : 'INSUFFICIENT_DATA',
     detail: dataComplete
       ? 'Recipient, value and method are all present.'
-      : `Cannot evaluate fully — missing ${missing.join(', ')}.`,
+      : `Cannot evaluate fully, missing ${missing.join(', ')}.`,
     verdictOnFailure: 'INSUFFICIENT_DATA',
   });
   if (!dataComplete) {

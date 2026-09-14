@@ -1,8 +1,8 @@
 /**
  * Deterministic seeding for every demo fixture.
  *
- * No Math.random and no Date.now at module scope anywhere in src/data — the
- * same clone always renders the same screen, so screenshots are stable.
+ * Nothing in src/data uses Math.random or Date.now at module scope, so the
+ * same clone always renders the same screen and screenshots stay stable.
  */
 
 /** Fixed demo clock: 2026-09-13T09:00:00Z, in unix seconds. */
@@ -12,7 +12,7 @@ export const DEMO_CLOCK_MS = DEMO_CLOCK_SECONDS * 1000;
 /** Block height the fixtures pretend to have been read at. */
 export const DEMO_BLOCK_NUMBER = 214_500_000n;
 
-/** mulberry32 — small, fast, fully deterministic for a given seed. */
+/** mulberry32. Small, fast and deterministic for a given seed. */
 export function createSeededRandom(seed: number): () => number {
   let state = seed >>> 0;
   return () => {
@@ -25,8 +25,8 @@ export function createSeededRandom(seed: number): () => number {
 }
 
 /**
- * Stable pseudo-hash for fixtures. Clearly synthetic: fixture rows are always
- * labelled DEMO_FIXTURE in the UI and are never presented as on-chain hashes.
+ * Stable pseudo-hash for fixtures. Fixture rows are labelled DEMO_FIXTURE in
+ * the UI and are never presented as on-chain hashes.
  */
 export function demoHash(label: string): `0x${string}` {
   let seed = 0;

@@ -1,9 +1,9 @@
 /**
  * Landing page at "/". The dashboard lives at "/app".
  *
- * Every figure on this page is measured from the repository (see stats.ts),
- * and the verdict object in the evidence section is produced at load time by
- * the real policy engine — not transcribed by hand.
+ * Every figure on this page is measured from the repository; stats.ts records
+ * how. The verdict object further down is produced at load time by the real
+ * policy engine rather than transcribed by hand.
  */
 import { appConfig } from '../config/env';
 import { ARBITRUM_SEPOLIA, SUPPORTED_CHAIN_ID } from '../config/network';
@@ -22,21 +22,21 @@ const STEPS = [
     no: '01',
     title: 'Fetch',
     body:
-      'The chain adapter polls getLogs over HTTP on a configurable interval — the public Arbitrum RPC has no WebSocket, so there is no subscription watcher anywhere in the codebase. Every event is stamped ONCHAIN or DEMO_FIXTURE and the interface renders that on every row.',
+      'The chain adapter polls getLogs over HTTP on an interval you configure. The public Arbitrum RPC has no WebSocket, so there is no subscription watcher in the codebase. Each event is stamped ONCHAIN or DEMO_FIXTURE and the interface shows that on every row.',
     tag: 'services/chain/viemAdapter.ts',
   },
   {
     no: '02',
     title: 'Classify',
     body:
-      'Recipient, value and method are decoded into a typed TransactionEvent with a plain-language summary of what the transaction does. This step describes; it never judges.',
+      'Recipient, value and method are decoded into a typed TransactionEvent with a plain-language summary of what the transaction does. This step describes what happened. It does not judge it.',
     tag: 'types/index.ts',
   },
   {
     no: '03',
     title: 'Deterministic policy',
     body:
-      'Five rules run in code and produce the verdict. Pure function, no I/O, no randomness, no model input — the same event always yields the same result. This happens before any model is called.',
+      'Five rules run in code and produce the verdict. The function is pure, takes no model input and has no randomness, so the same event always yields the same result. All of it happens before any model is called.',
     tag: 'services/policy/rules.ts',
     accent: true,
   },
@@ -44,14 +44,14 @@ const STEPS = [
     no: '04',
     title: 'The AI explains',
     body:
-      'The finished verdict is handed to the model as read-only context. Its reply is validated against a schema that has no verdict field, so a verdict cannot be expressed through the boundary; the model must cite observed facts, and anything else it returns is listed in the interface as discarded.',
+      'The finished verdict goes to the model as read-only context. Its reply is validated against a schema that has no verdict field, so a verdict cannot be expressed through the boundary at all. The model has to cite observed facts. Anything else it returns is listed in the interface as discarded.',
     tag: 'services/ai/guard.ts',
   },
   {
     no: '05',
     title: 'A human approves',
     body:
-      'Nothing moves until a person sees the exact recipient, value, chain, method, decoded calldata and reason, and approves it by hand. The contract then re-checks every limit before it will release a single wei.',
+      'Nothing moves until a person sees the exact recipient, value, chain, method, decoded calldata and reason, then approves it by hand. The contract re-checks every limit before it releases a single wei.',
     tag: 'contracts/TreasuryGuardian.sol',
   },
 ] as const;
@@ -76,7 +76,7 @@ const ENFORCEMENT = [
     verdict: 'REVIEW_REQUIRED',
     tone: 'review' as const,
     ui: 'Flagged for a human, with the failing rule and its reason shown.',
-    chain: 'propose() reverts RecipientNotAllowed — the allowlist is immutable.',
+    chain: 'propose() reverts RecipientNotAllowed. The allowlist is immutable.',
   },
   {
     condition: 'Method not allowlisted',
@@ -96,7 +96,7 @@ const ENFORCEMENT = [
     condition: 'Every rule passes',
     verdict: 'LOW_RISK',
     tone: 'low' as const,
-    ui: 'An action can be prepared — and still requires explicit human approval.',
+    ui: 'An action can be prepared, and it still needs explicit human approval.',
     chain: 'execute() reverts unless approve() was called first by the authorised approver.',
   },
   {
@@ -104,7 +104,7 @@ const ENFORCEMENT = [
     verdict: 'DISCARDED',
     tone: 'blocked' as const,
     ui: 'The field is dropped by the schema and named in the interface as ignored.',
-    chain: 'The model never touches a transaction; it has no signer and no call path.',
+    chain: 'The model never touches a transaction. It has no signer and no call path.',
   },
 ] as const;
 
@@ -117,7 +117,7 @@ const TONE_CLASS: Record<string, string> = {
 
 /* ------------------------------------------------- the live verdict object */
 
-/** Runs the real engine on a real fixture, at page load. */
+/** Runs the real engine on a real fixture when the page loads. */
 function buildVerdictSample(): string {
   const policy = {
     chainId: SUPPORTED_CHAIN_ID,
@@ -146,7 +146,7 @@ function buildVerdictSample(): string {
     '  "reasons": [',
     ...assessment.reasons.map((reason) => `    "${reason}"`),
     '  ],',
-    `  "observedFacts": [ // ${assessment.observedFacts.length} facts — the only evidence the AI may cite`,
+    `  "observedFacts": [ // ${assessment.observedFacts.length} facts, the only evidence the AI may cite`,
     '  ],',
     `  "evaluatedAt": ${assessment.evaluatedAt},`,
     `  "policyVersion": "${assessment.policyVersion}"`,
@@ -226,10 +226,9 @@ export function LandingPage(): React.JSX.Element {
             <em>It never decides.</em>
           </h1>
           <p className="lp__claim">
-            Treasury Guardian AI watches an {ARBITRUM_SEPOLIA.name} treasury, explains every
-            transaction in plain language, and prepares actions a human approves by hand. The risk
-            verdict is computed in code before a model is called — and nothing a model returns can
-            change it.
+            Treasury Guardian AI watches an {ARBITRUM_SEPOLIA.name} treasury and explains what each
+            transaction does. Risk verdicts come from rules in code that run before any model is
+            called. Nothing the model returns can change one.
           </p>
           <div className="lp__cta">
             <a className="lp__btn lp__btn--primary" href="/app">
@@ -264,43 +263,43 @@ export function LandingPage(): React.JSX.Element {
             <div>
               <h2 className="lp__h2">An agent that can approve its own transactions is not a safety feature.</h2>
               <p className="lp__lead">
-                The pitch is always the same: the agent watches the treasury, decides what looks
-                suspicious, and acts. That asks you to trust a model&rsquo;s judgement at the exact
-                moment money moves — the one moment where judgement is the wrong instrument.
+                The pitch is usually the same. An agent watches the treasury, decides what looks
+                suspicious, and acts. That asks you to trust a model&rsquo;s judgement at the moment
+                money moves, which is where judgement is the wrong instrument.
               </p>
             </div>
             <div>
               <p className="lp__quote">
-                If a model can approve a transaction, then everything the model reads is an attack
-                surface, and every approval is unverifiable after the fact.
+                If a model can approve a transaction, everything the model reads becomes an attack
+                surface, and no approval can be checked afterwards.
               </p>
               <ul className="lp__bullets" style={{ marginTop: 28 }}>
                 <li className="lp__bullet">
-                  <strong>Unrepeatable.</strong>
+                  <strong>A judgement is not a rule.</strong>
                   <span>
-                    A judgement is not a rule. It shifts between runs, prompts, temperatures and
-                    providers, so the same transfer can pass on Tuesday and fail on Wednesday.
+                    It shifts between runs, prompts, temperatures and providers. The same transfer
+                    can pass on Tuesday and fail on Wednesday.
                   </span>
                 </li>
                 <li className="lp__bullet">
-                  <strong>Untestable.</strong>
+                  <strong>You cannot unit test one.</strong>
                   <span>
-                    You cannot write a unit test for &ldquo;looked fine to me&rdquo;. There is no
-                    assertion to make and no regression to catch.
+                    There is no assertion to write for &ldquo;looked fine to me&rdquo;, so there is
+                    no regression to catch when it stops being true.
                   </span>
                 </li>
                 <li className="lp__bullet">
-                  <strong>Injectable.</strong>
+                  <strong>Everything it reads was written by someone else.</strong>
                   <span>
-                    Everything an agent reads is text someone else wrote — a memo field, a token
-                    name, a contract comment. Text that reaches a decision-maker is an instruction.
+                    A memo field, a token name or a contract comment all arrive as text, and text
+                    that reaches a decision-maker works as an instruction.
                   </span>
                 </li>
                 <li className="lp__bullet">
-                  <strong>Unbounded.</strong>
+                  <strong>An agent holding a key has no upper bound.</strong>
                   <span>
-                    Give an agent a key and its worst case is the whole balance. Bounds have to live
-                    somewhere the agent cannot reach.
+                    Its worst case is the whole balance. Limits have to live somewhere the agent
+                    cannot reach.
                   </span>
                 </li>
               </ul>
@@ -312,10 +311,10 @@ export function LandingPage(): React.JSX.Element {
       <section className="lp__section">
         <div className="lp__wrap">
           <p className="lp__eyebrow">How it works</p>
-          <h2 className="lp__h2">Five steps. The model only gets one of them.</h2>
+          <h2 className="lp__h2">Five steps, and the model only gets one of them.</h2>
           <p className="lp__lead">
-            The order is the whole argument: by the time the model is asked anything, the verdict
-            already exists and is final.
+            The order carries the whole argument. By the time the model is asked anything, the
+            verdict already exists and is final.
           </p>
 
           <ol className="lp__steps">
@@ -338,7 +337,7 @@ export function LandingPage(): React.JSX.Element {
           <p className="lp__eyebrow">Enforcement</p>
           <h2 className="lp__h2">What actually happens when a rule fails.</h2>
           <p className="lp__lead">
-            Each rule has one deterministic verdict, one consequence in the interface, and one
+            Every rule has one deterministic verdict, one consequence in the interface and one
             consequence on chain. The interface cannot widen the contract&rsquo;s limits, and the
             contract does not trust the interface.
           </p>
@@ -390,11 +389,11 @@ export function LandingPage(): React.JSX.Element {
       <section className="lp__section">
         <div className="lp__wrap">
           <p className="lp__eyebrow">Evidence</p>
-          <h2 className="lp__h2">A verdict is an object, not an opinion.</h2>
+          <h2 className="lp__h2">Every verdict comes back as this object.</h2>
           <p className="lp__lead">
-            This is the real output of the policy engine, produced by this page as it rendered. It
-            carries the verdict, every rule that ran, the reason in plain language, and the fixed set
-            of facts the model is allowed to cite.
+            This is real output, produced by this page as it rendered. It carries the verdict, every
+            rule that ran, the reason in plain language, and the fixed set of facts the model is
+            allowed to cite.
           </p>
 
           <div className="lp__code">
@@ -405,10 +404,10 @@ export function LandingPage(): React.JSX.Element {
             <JsonBlock source={verdictSample} />
           </div>
           <p className="lp__note">
-            The AI response type sitting next to this object has no verdict field at all — there is
-            no key for a model to set. A test feeds it a hostile response carrying{' '}
-            <code>verdict</code>, <code>override</code> and an injection in the rationale, and
-            asserts the assessment comes back unchanged, by object identity.
+            The AI response type next to this object has no verdict field, so there is no key for a
+            model to set. A test feeds it a hostile response carrying <code>verdict</code>,{' '}
+            <code>override</code> and an injection in the rationale, then asserts the assessment
+            comes back unchanged by object identity.
           </p>
         </div>
       </section>
@@ -417,8 +416,8 @@ export function LandingPage(): React.JSX.Element {
         <div className="lp__wrap">
           <h2 className="lp__h2">See it refuse something.</h2>
           <p className="lp__lead">
-            The dashboard opens in Demo Mode on deterministic fixtures — no wallet, no keys, nothing
-            broadcast. Four of the eight sample events fail policy.
+            The dashboard opens in Demo Mode on deterministic fixtures. It needs no wallet and no
+            keys, and nothing is broadcast. Four of the eight sample events fail policy.
           </p>
           <div className="lp__cta">
             <a className="lp__btn lp__btn--primary" href="/app">

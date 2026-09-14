@@ -1,4 +1,4 @@
-/** Screen 2 — Transaction inspection. Everything the reviewer needs, decoded. */
+/** Screen 2. Transaction inspection: everything the reviewer needs, decoded. */
 import { ARBITRUM_SEPOLIA, explorerTxUrl } from '../config/network';
 import { demoLabelFor } from '../data/demo.accounts';
 import { formatEthWithUnit, formatTimestamp } from '../lib/format';
@@ -61,7 +61,7 @@ export function TransactionInspection({
           <dd>
             {event.chainId === ARBITRUM_SEPOLIA.id
               ? `${ARBITRUM_SEPOLIA.name} (${event.chainId})`
-              : `Chain ${event.chainId} — not a supported target`}
+              : `Chain ${event.chainId}, which is not a supported target`}
           </dd>
           <dt>Recipient</dt>
           <dd className="mono breakable">

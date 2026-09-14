@@ -1,14 +1,14 @@
 /**
  * Optional remote AI adapter.
  *
- * The endpoint and model come from public frontend config; the API key is
- * typed in at runtime and held in this module's closure for the session only —
- * it is never written to storage, never logged, and never put in a VITE_ var.
+ * The endpoint and model come from public frontend config. The API key is
+ * typed in at runtime and held in this module's closure for the session only.
+ * It is never written to storage, never logged, and never put in a VITE_ var.
  *
- * The endpoint contract is intentionally provider-neutral: it must accept
- * `POST {system, prompt, model}` and answer with either `{content: string}`,
- * `{text: string}`, or the structured object itself. Configure your own proxy;
- * no provider API shape is assumed here.
+ * The endpoint contract is provider-neutral. It has to accept
+ * `POST {system, prompt, model}` and answer with `{content: string}`,
+ * `{text: string}`, or the structured object itself. Point it at your own
+ * proxy. No provider API shape is assumed here.
  */
 import { applyAiOutput } from './guard';
 import { AI_SYSTEM_PROMPT, buildUserPrompt } from './prompt';

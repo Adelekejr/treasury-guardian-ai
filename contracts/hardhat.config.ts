@@ -11,8 +11,8 @@ const SOLC_VERSION = '0.8.26';
 /**
  * Compile with the `solc` package from npm instead of downloading a binary
  * from binaries.soliditylang.org. This keeps `npm test` working in sandboxed
- * or offline CI, and pins the compiler to the version in package.json.
- * Hardhat's own download path still applies for any other version.
+ * or offline CI and pins the compiler to the version in package.json.
+ * Hardhat's own download path still applies to any other version.
  */
 subtask(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, async (args: { solcVersion: string }, _hre, runSuper) => {
   if (args.solcVersion !== SOLC_VERSION) return runSuper(args);
@@ -30,9 +30,9 @@ subtask(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD, async (args: { solcVersion: string
 const deployerKey = process.env.DEPLOYER_PRIVATE_KEY?.trim();
 
 /**
- * Only two networks exist here: the in-process Hardhat network for unit tests
- * and Arbitrum Sepolia. There is deliberately no mainnet or Arbitrum One
- * entry — there is nothing to point a deploy at.
+ * Two networks exist here. The in-process Hardhat network runs the unit tests,
+ * and Arbitrum Sepolia is the deploy target. No mainnet or Arbitrum One entry
+ * exists, so there is nothing to point a deploy at.
  */
 const config: HardhatUserConfig = {
   solidity: {

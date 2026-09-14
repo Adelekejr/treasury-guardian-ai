@@ -2,8 +2,8 @@
  * The code-level guarantee that the AI cannot override policy.
  *
  * Everything a model returns passes through here. The deterministic
- * `RiskAssessment` goes in and comes out *by identity* — this module has no
- * code path that can produce a different verdict — while the model's output is
+ * `RiskAssessment` goes in and comes out as the same object, since no code
+ * path in this module can produce a different verdict. The model's output is
  * reduced to an explanation with no authority.
  */
 import type { AiExplanationState, AiRecommendation, RiskAssessment, RiskVerdict } from '../../types';
@@ -73,7 +73,7 @@ export function applyAiOutput(
   }
 
   return {
-    // Identity, not a copy: the verdict is physically the one policy produced.
+    // The same object the policy engine produced, never a rebuilt copy.
     assessment,
     ai: { status: 'READY', explanation: validated.value, error: null },
     recommendationConflictsWithPolicy: aiConflictsWithPolicy(

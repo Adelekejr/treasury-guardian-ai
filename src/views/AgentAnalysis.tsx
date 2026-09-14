@@ -1,4 +1,4 @@
-/** Screen 3 — Agent analysis. The steps are visible, and their order matters. */
+/** Screen 3. Agent analysis. The steps are visible, and their order matters. */
 import { useEffect } from 'react';
 import { RiskBadge, ProvenanceMark } from '../components/Badges';
 import { AgentSteps } from '../components/AgentSteps';
@@ -57,9 +57,9 @@ export function AgentAnalysis({
         </div>
       </div>
 
-      <Notice tone="info" title="Deterministic first, explanation second.">
-        The verdict is computed in code before {aiName} is called, and is passed to it as read-only
-        context. Any verdict field in a model response is discarded.
+      <Notice tone="info" title="The policy runs before the model does.">
+        The verdict is computed in code first, then handed to {aiName} as read-only context. Any
+        verdict field in a model response is discarded.
       </Notice>
 
       <section className="card stack" aria-label="Agent steps">

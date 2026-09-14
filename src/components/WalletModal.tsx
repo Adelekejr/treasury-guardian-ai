@@ -1,19 +1,16 @@
 /**
  * Wallet selection modal.
  *
- * Opens on every Connect click and never does nothing: the three catalogue
- * wallets are always listed, installed ones are marked "Detected" and connect
- * on click, missing ones stay visible as "Not installed" with a link to their
- * official download page, and with zero wallets present the modal explains
- * what to install. Errors from the wallet are shown here rather than swallowed.
+ * It opens on every Connect click and always has something to show. The three
+ * catalogue wallets are listed every time. Installed ones are marked
+ * "Detected" and connect on click, missing ones stay visible as "Not
+ * installed" with a link to their official download page, and if no wallet is
+ * present at all the modal says what to install. Errors coming back from a
+ * wallet are shown here rather than swallowed.
  */
 import { useEffect, useRef, useState } from 'react';
 import { ARBITRUM_SEPOLIA } from '../config/network';
-import {
-  WALLETCONNECT_PLACEHOLDER,
-  buildWalletOptions,
-  type WalletOption,
-} from '../services/wallet/catalog';
+import { buildWalletOptions, type WalletOption } from '../services/wallet/catalog';
 import type { Eip6963ProviderDetail } from '../services/wallet/eip6963';
 import { IconCheck, IconInfo, IconWallet, IconX } from './Icons';
 
@@ -108,9 +105,9 @@ export function WalletModal({
             <div>
               <p className="notice__title">No wallet detected in this browser.</p>
               <p className="small muted" style={{ marginTop: 4 }}>
-                Nothing announced itself over EIP-6963 and there is no injected provider. Install one
-                of the wallets below, then reopen this dialog — the app keeps working read-only in
-                the meantime.
+                Nothing announced itself over EIP-6963 and there is no injected provider. Install
+                one of the wallets below, then reopen this dialog. The app keeps working read-only
+                in the meantime.
               </p>
             </div>
           </div>
@@ -190,16 +187,6 @@ export function WalletModal({
               </li>
             );
           })}
-          <li key={WALLETCONNECT_PLACEHOLDER.id}>
-            <div className="wallet wallet--inert" aria-disabled="true">
-              <OptionIcon option={WALLETCONNECT_PLACEHOLDER} />
-              <span className="wallet__body">
-                <span className="wallet__name">{WALLETCONNECT_PLACEHOLDER.name}</span>
-                <span className="wallet__note">{WALLETCONNECT_PLACEHOLDER.note}</span>
-              </span>
-              <span className="chip chip--unknown">Later</span>
-            </div>
-          </li>
         </ul>
 
         <p className="modal__foot">

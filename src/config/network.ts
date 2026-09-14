@@ -1,6 +1,6 @@
 /**
- * Verified network facts. These values are fixed by the brief; nothing here is
- * invented and no other chain may become a usable target.
+ * Verified network facts. These values are fixed, and no other chain can become
+ * a usable target.
  */
 
 export interface ChainFacts {
@@ -31,8 +31,8 @@ export const ARBITRUM_SEPOLIA: ChainFacts = {
 export const SUPPORTED_CHAIN_ID = ARBITRUM_SEPOLIA.id;
 
 /**
- * Chains that must never appear as a usable target. Listed so the app can name
- * them in an error state — never so it can connect to them.
+ * Chains that must never appear as a usable target. They are listed so the app
+ * can name them in an error state, not so it can connect to them.
  */
 export const FORBIDDEN_CHAINS: ReadonlyMap<number, string> = new Map([
   [1, 'Ethereum mainnet'],

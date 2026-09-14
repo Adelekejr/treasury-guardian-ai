@@ -28,7 +28,7 @@ export function PolicyChecklist({ checks }: { checks: readonly PolicyCheck[] }):
     <>
     <div className="table-wrap table-wrap--responsive">
       <table className="audit audit--compact">
-        <caption>Deterministic policy checks — computed in code before any AI call.</caption>
+        <caption>Deterministic policy checks, computed in code before any AI call.</caption>
         <thead>
           <tr>
             <th scope="col">Rule</th>

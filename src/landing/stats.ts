@@ -1,15 +1,15 @@
 /**
  * Landing page figures.
  *
- * Every number here is measured from this repository. Nothing is estimated,
- * rounded up, or invented. When the counts change, re-measure and update:
+ * Every number here is measured from this repository. Nothing is estimated or
+ * rounded up. When the counts change, re-measure them:
  *
  *   frontendTests  -> npm test                 (Vitest summary line)
  *   contractTests  -> npm run test:contracts   (Mocha summary line)
  *   states         -> counted from IMPLEMENTED_STATES below
  *   chainId        -> src/config/network.ts
  *
- * Last measured: 2026-09-14, after the wallet picker landed.
+ * Last measured on 2026-09-14, after the wallet picker landed.
  */
 import { SUPPORTED_CHAIN_ID } from '../config/network';
 
@@ -45,21 +45,21 @@ export const STATS: readonly LandingStat[] = [
   {
     value: '16',
     label: 'contract tests',
-    note: 'Hardhat, covering every allowlist limit and the approval boundary',
+    note: 'Hardhat tests covering the allowlist limits and the approval boundary',
   },
   {
     value: '47',
     label: 'frontend tests',
-    note: 'Vitest, including proof a hostile model cannot change a verdict',
+    note: 'Vitest tests. One of them proves a hostile model cannot change a verdict',
   },
   {
     value: String(IMPLEMENTED_STATES.length),
     label: 'implemented states',
-    note: 'every risk, outage and disconnection state is reachable in the app',
+    note: 'every risk and outage state is reachable in the running app',
   },
   {
     value: String(SUPPORTED_CHAIN_ID),
     label: 'the only chain id',
-    note: 'Arbitrum Sepolia testnet — any other chain id is refused at startup',
+    note: 'Arbitrum Sepolia testnet. Any other chain id is refused at startup',
   },
 ];

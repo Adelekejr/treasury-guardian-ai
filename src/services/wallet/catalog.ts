@@ -1,14 +1,13 @@
 /**
  * The wallet catalogue.
  *
- * These wallets are always listed, whether or not they are installed. A wallet
- * that is missing is shown as "Not installed" with a link to its official
- * download page — never hidden, never silently dropped, so the list is the same
- * every time you open it.
+ * These wallets are listed whether or not they are installed, so the dialog
+ * shows the same options every time it opens. A missing wallet is shown as
+ * "Not installed" with a link to its official download page.
  *
- * Detected wallets render the icon the wallet itself announces over EIP-6963.
- * For the ones that are not installed there is no announced icon and no brand
- * asset in this repository, so they get a neutral monogram tile rather than an
+ * Detected wallets render the icon the wallet announces over EIP-6963. The
+ * ones that are not installed announce nothing, and this repository carries no
+ * brand assets, so they get a neutral monogram tile instead of an
  * approximation of someone's trademark.
  */
 import type { Eip6963ProviderDetail } from './eip6963';
@@ -63,7 +62,7 @@ export interface WalletOption {
   readonly monogram: string;
   readonly installUrl: string | null;
   readonly detail: Eip6963ProviderDetail | null;
-  /** Shown under the name — why this row looks the way it does. */
+  /** Shown under the name. Explains why the row looks the way it does. */
   readonly note: string;
 }
 
@@ -75,8 +74,9 @@ function matches(known: KnownWallet, detail: Eip6963ProviderDetail): boolean {
 }
 
 /**
- * Build the list the modal renders: every catalogue wallet in a stable order —
- * detected first — followed by any other wallet that announced itself.
+ * Build the list the modal renders. Catalogue wallets come first in a stable
+ * order, detected ones ahead of the rest, then any other wallet that announced
+ * itself.
  */
 export function buildWalletOptions(detected: readonly Eip6963ProviderDetail[]): WalletOption[] {
   const claimed = new Set<Eip6963ProviderDetail>();
@@ -103,7 +103,7 @@ export function buildWalletOptions(detected: readonly Eip6963ProviderDetail[]): 
           monogram: known.monogram,
           installUrl: known.installUrl,
           detail: null,
-          note: 'Not installed — opens the official download page',
+          note: 'Not installed. Opens the official download page',
         };
   });
 
@@ -140,5 +140,5 @@ export const WALLETCONNECT_PLACEHOLDER: WalletOption = {
   monogram: 'W',
   installUrl: null,
   detail: null,
-  note: 'Not enabled yet — needs a WalletConnect project id',
+  note: 'Needs a WalletConnect project id',
 };

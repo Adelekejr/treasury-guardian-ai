@@ -1,10 +1,10 @@
 /**
  * Live chain adapter for Arbitrum Sepolia.
  *
- * Transport is HTTP only: the public Arbitrum RPC has no WebSocket endpoint,
- * so there is no `webSocket()` transport and no subscription watcher anywhere
- * in this file. Events are read by polling `getLogs` over a bounded block
- * range — the caller controls the interval.
+ * Transport is HTTP only. The public Arbitrum RPC has no WebSocket endpoint,
+ * so there is no `webSocket()` transport and no subscription watcher in this
+ * file. Events are read by polling `getLogs` over a bounded block range, and
+ * the caller controls the interval.
  */
 import { createPublicClient, decodeEventLog, http, type Log, type PublicClient } from 'viem';
 import { arbitrumSepolia } from 'viem/chains';
@@ -79,7 +79,7 @@ function toEvent(
         method: method ?? (methodTagValue ? `unknown (${methodTagValue})` : null),
         decodedSummary:
           `Proposal #${proposalId}: send ${formatEthWithUnit(value)} to ${shortenAddress(to)}` +
-          (reason ? ` — "${reason}". Awaiting explicit approval.` : '. Awaiting explicit approval.'),
+          (reason ? ` for "${reason}". Awaiting explicit approval.` : '. Awaiting explicit approval.'),
         direction: 'OUT' as const,
       };
     }
@@ -101,7 +101,7 @@ function toEvent(
         to: guardianAddress,
         valueWei: null,
         method: 'reject',
-        decodedSummary: `Proposal #${proposalId} rejected${reason ? ` — "${reason}"` : ''}. Terminal.`,
+        decodedSummary: `Proposal #${proposalId} rejected${reason ? ` for "${reason}"` : ''}. Terminal.`,
         direction: 'INTERNAL' as const,
       };
     }
@@ -164,7 +164,7 @@ export function createViemChainAdapter(config: AppConfig): ChainAdapter {
 
   return {
     mode: 'live',
-    label: `Live RPC — ${config.rpcUrl}`,
+    label: `Live RPC at ${config.rpcUrl}`,
 
     async getNetworkStatus({ connectedChainId, now }: NetworkStatusInput): Promise<NetworkStatus> {
       const base = {
@@ -280,7 +280,7 @@ export function createViemChainAdapter(config: AppConfig): ChainAdapter {
     async getRecentEvents({ limit }: { limit: number }): Promise<readonly TransactionEvent[]> {
       if (!config.guardianAddress) {
         throw new ChainUnavailableError(
-          'No contract address configured — there are no guardian logs to poll.',
+          'No contract address is configured, so there are no guardian logs to poll.',
         );
       }
 

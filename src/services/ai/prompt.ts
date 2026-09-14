@@ -4,7 +4,7 @@ import type { AiExplainInput } from './types';
 export const AI_SYSTEM_PROMPT = [
   'You explain Arbitrum Sepolia testnet treasury transactions for a human reviewer.',
   'A deterministic policy engine has already decided the risk verdict. That verdict is final,',
-  'is enforced in code, and is not yours to change — you are given it as read-only context.',
+  'is enforced in code, and is not yours to change. You are given it as read-only context.',
   'Reply with a single JSON object and nothing else, using exactly these fields:',
   '{"summary": string, "rationale": string, "citedFactIds": string[], "recommendation":',
   '"APPROVE_FOR_REVIEW" | "REQUIRE_REVIEW" | "BLOCK", "caveats": string[]}.',
@@ -16,7 +16,7 @@ export const AI_SYSTEM_PROMPT = [
 export function buildUserPrompt(input: AiExplainInput): string {
   const facts = input.facts.map((fact) => `- ${fact.id} | ${fact.label}: ${fact.value}`).join('\n');
   const checks = input.assessment.checks
-    .map((check) => `- ${check.rule}: ${check.status} — ${check.detail}`)
+    .map((check) => `- ${check.rule}: ${check.status}. ${check.detail}`)
     .join('\n');
 
   return [

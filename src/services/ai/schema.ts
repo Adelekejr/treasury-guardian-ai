@@ -1,8 +1,8 @@
 /**
  * Structured-output validation for AI responses.
  *
- * The schema has no verdict/risk field, so a model literally cannot express
- * one through this boundary. Any extra key a model returns is recorded in
+ * The schema has no verdict or risk field, so a model cannot express one
+ * through this boundary. Any extra key a model returns is recorded in
  * `ignoredModelFields` and discarded.
  */
 import type { AiExplanation, AiRecommendation } from '../../types';
@@ -56,7 +56,7 @@ export function parseModelJson(raw: string): ValidationFailure | { ok: true; val
  * Validate a parsed model response.
  *
  * @param allowedFactIds ids the model is permitted to cite. Citing anything
- *        else is rejected — the model may not invent evidence.
+ *        else is rejected, so the model cannot invent evidence.
  */
 export function validateAiExplanation(
   input: unknown,

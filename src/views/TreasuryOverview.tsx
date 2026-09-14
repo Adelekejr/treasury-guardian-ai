@@ -1,7 +1,8 @@
 /**
- * Screen 1 — Treasury overview.
- * Balance and risk sit directly under one status line, so the instrument
- * reading is the first thing on screen at any width.
+ * Screen 1. Treasury overview.
+ *
+ * Balance and risk sit directly under one status line, so the reading is the
+ * first thing on screen at any width.
  */
 import { ARBITRUM_SEPOLIA } from '../config/network';
 import { formatEth, formatEthWithUnit, formatTimestamp } from '../lib/format';

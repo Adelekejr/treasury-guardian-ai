@@ -1,9 +1,10 @@
 /**
- * Screen 4 — Approval flow.
+ * Screen 4. Approval flow.
  *
- * Nothing here is automatic: the exact recipient, value, chain, method,
- * decoded calldata and reason are shown, a testnet warning is unavoidable, and
- * the approve button stays disabled until a human ticks the review box.
+ * Nothing here is automatic. The exact recipient, value, chain, method,
+ * decoded calldata and reason are all shown, the testnet warning is
+ * unavoidable, and the approve button stays disabled until a human ticks the
+ * review box.
  */
 import { useEffect, useState } from 'react';
 import { ARBITRUM_SEPOLIA, explorerTxUrl } from '../config/network';
@@ -95,7 +96,7 @@ export function ApprovalFlow({
         </div>
       </div>
 
-      <Notice tone="warning" title="Testnet only — Arbitrum Sepolia (chain 421614).">
+      <Notice tone="warning" title="Testnet only. Arbitrum Sepolia, chain 421614.">
         This app never operates on mainnet and never uses real funds. Approval sends testnet ETH only.
       </Notice>
 
@@ -166,7 +167,7 @@ export function ApprovalFlow({
           <ul className="stack" style={{ listStyle: 'none', margin: 0, padding: 0, gap: 6 }}>
             {submissionSteps.map((step) => (
               <li key={step.id} className="small prose">
-                <strong>{step.label}</strong> · {step.state} — {step.message}
+                <strong>{step.label}</strong> · {step.state} · {step.message}
                 {step.hash ? <div className="tiny mono breakable">{step.hash}</div> : null}
               </li>
             ))}
@@ -215,7 +216,7 @@ export function ApprovalFlow({
             disabled={!canApprove}
             onClick={() => void approve(eventId, note)}
           >
-            {submitting ? 'Submitting…' : demoActive ? 'Approve (demo — nothing is sent)' : 'Approve and execute'}
+            {submitting ? 'Submitting…' : demoActive ? 'Approve (demo, nothing is sent)' : 'Approve and execute'}
           </button>
           <button
             type="button"

@@ -10,22 +10,22 @@ pragma solidity ^0.8.24;
  *         until the single authorised approver explicitly APPROVES it, and
  *         execution re-checks every limit at execution time.
  *
- * Safety properties, on purpose:
- *  - no delegatecall, no arbitrary external calls, no calldata forwarding;
- *    the only value movement is a plain native transfer to an allowlisted
- *    recipient;
- *  - no owner backdoor: the approver, the recipient allowlist, the method
- *    allowlist and the transfer limit are all fixed at construction and there
- *    is no setter, no pause, no sweep and no self-destruct;
- *  - no upgradeability and no proxy;
- *  - no token approvals of any kind, so no unlimited allowance is possible;
- *  - all addresses and limits come from deploy-time configuration, never from
- *    values hardcoded in this source.
+ * Deliberate safety properties:
+ *  - there is no delegatecall, no arbitrary external call and no calldata
+ *    forwarding. The only value movement is a plain native transfer to an
+ *    allowlisted recipient.
+ *  - there is no owner backdoor. The approver, the recipient allowlist, the
+ *    method allowlist and the transfer limit are fixed at construction. There
+ *    is no setter, no pause, no sweep and no self-destruct.
+ *  - there is no upgradeability and no proxy.
+ *  - there are no token approvals, so an unlimited allowance is impossible.
+ *  - all addresses and limits come from deploy-time configuration rather than
+ *    from values hardcoded in this source.
  *
- * @dev `method` is a bytes4 label tag, computed off-chain as
+ * @dev `method` is a bytes4 label tag, computed off chain as
  *      bytes4(keccak256(bytes(label))) for a human label such as
- *      "transferNative". It records WHAT the payout is for and is checked
- *      against the method allowlist; it is never used to dispatch a call.
+ *      "transferNative". It records what the payout is for and is checked
+ *      against the method allowlist. It never dispatches a call.
  */
 contract TreasuryGuardian {
     enum Status {
@@ -135,7 +135,7 @@ contract TreasuryGuardian {
     }
 
     /**
-     * @notice Record a payout proposal. Never moves value.
+     * @notice Record a payout proposal. This never moves value.
      * @dev Reverts on a recipient that is not allowlisted, a method that is not
      *      allowlisted, or an amount over the configured limit.
      */
@@ -179,7 +179,7 @@ contract TreasuryGuardian {
 
     /**
      * @notice Execute an approved proposal. Reverts if it was never approved.
-     * @dev Limits are re-checked here so a change of state between proposal and
+     * @dev Limits are re-checked here, so a state change between proposal and
      *      execution cannot widen what is permitted.
      */
     function execute(uint256 id) external onlyApprover {

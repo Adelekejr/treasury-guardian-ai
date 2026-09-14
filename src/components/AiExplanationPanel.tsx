@@ -1,6 +1,6 @@
 /**
- * The AI's slot in the UI. It is always rendered next to the deterministic
- * verdict, always labelled advisory, and never replaces the verdict.
+ * The AI's slot in the UI. It renders next to the deterministic verdict, is
+ * labelled advisory, and never replaces the verdict.
  */
 import type { AiExplanationState, ObservedFact, RiskVerdict } from '../types';
 import { verdictLabel } from '../services/policy/rules';
@@ -46,8 +46,8 @@ export function AiExplanationPanel({
           {state.error ?? 'No explanation has been requested yet.'}
         </Notice>
         <p className="small muted">
-          The deterministic verdict <strong>{verdictLabel(verdict)}</strong> and the evidence below are
-          unaffected — the app never depends on the model to decide.
+          The deterministic verdict <strong>{verdictLabel(verdict)}</strong> and the evidence below
+          are unaffected. The app never depends on the model to decide.
         </p>
       </div>
     );

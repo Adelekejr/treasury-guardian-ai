@@ -158,7 +158,7 @@ export interface AgentStep {
   readonly detail: string;
 }
 
-/** AI recommendation vocabulary. Advisory only — it never sets the verdict. */
+/** AI recommendation vocabulary. Advisory only. It never sets the verdict. */
 export type AiRecommendation = 'APPROVE_FOR_REVIEW' | 'REQUIRE_REVIEW' | 'BLOCK';
 
 /**
@@ -186,7 +186,7 @@ export type AiStatus = 'IDLE' | 'LOADING' | 'READY' | 'UNAVAILABLE';
 export interface AiExplanationState {
   readonly status: AiStatus;
   readonly explanation: AiExplanation | null;
-  /** Why the explanation is unavailable — shown verbatim in the UI. */
+  /** Why the explanation is unavailable. Shown verbatim in the UI. */
   readonly error: string | null;
 }
 

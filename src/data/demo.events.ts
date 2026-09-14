@@ -56,7 +56,7 @@ export const DEMO_EVENTS: readonly TransactionEvent[] = [
     timestamp: demoTime(-2 * HOUR),
     from: DEMO_TREASURY_ADDRESS,
     to: DEMO_DRAIN_RECIPIENT,
-    valueWei: 400_000_000_000_000_000n, // 0.4 ETH — over the 0.05 limit
+    valueWei: 400_000_000_000_000_000n, // 0.4 ETH, over the 0.05 limit
     method: 'transferNative',
     decodedSummary: 'Attempt to move 0.4 ETH out of the treasury in a single transfer.',
     direction: 'OUT',
@@ -86,7 +86,7 @@ export const DEMO_EVENTS: readonly TransactionEvent[] = [
     to: DEMO_ALLOWED_RECIPIENTS[2],
     valueWei: 10_000_000_000_000_000n, // 0.01 ETH
     method: 'sweepAll',
-    decodedSummary: 'Call sweepAll on the treasury — a method that is not on the allowlist.',
+    decodedSummary: 'Call sweepAll on the treasury, which is not on the method allowlist.',
     direction: 'OUT',
     blockNumber: DEMO_BLOCK_NUMBER - 780n,
     provenance: 'DEMO_FIXTURE',
@@ -100,7 +100,7 @@ export const DEMO_EVENTS: readonly TransactionEvent[] = [
     to: null,
     valueWei: null,
     method: null,
-    decodedSummary: 'Log entry with no recipient, value or method — the decoder could not read it.',
+    decodedSummary: 'Log entry with no recipient, value or method. The decoder could not read it.',
     direction: 'UNKNOWN',
     blockNumber: DEMO_BLOCK_NUMBER - 910n,
     provenance: 'DEMO_FIXTURE',
@@ -116,7 +116,7 @@ export const DEMO_EVENTS: readonly TransactionEvent[] = [
     to: DEMO_ALLOWED_RECIPIENTS[0],
     valueWei: 5_000_000_000_000_000n, // 0.005 ETH
     method: 'transferNative',
-    decodedSummary: 'Transfer observed on a foreign chain id — outside the supported network.',
+    decodedSummary: 'Transfer observed on a foreign chain id, outside the supported network.',
     direction: 'OUT',
     blockNumber: null,
     provenance: 'DEMO_FIXTURE',

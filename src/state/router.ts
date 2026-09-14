@@ -1,4 +1,4 @@
-/** Tiny hash router — no dependency, keyboard and back-button friendly. */
+/** Small hash router with no dependency. Keyboard and back button work. */
 import { useCallback, useEffect, useState } from 'react';
 
 export type Route =

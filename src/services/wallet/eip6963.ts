@@ -1,11 +1,10 @@
 /**
  * EIP-6963 wallet discovery.
  *
- * Multiple injected wallets overwrite each other on `window.ethereum`, so the
- * last one to load wins and the rest become unreachable. EIP-6963 fixes that:
- * the page dispatches `eip6963:requestProvider`, every wallet answers with its
- * own `eip6963:announceProvider` event, and each provider stays addressable
- * separately.
+ * Injected wallets overwrite each other on `window.ethereum`, so the last one
+ * to load wins and the rest become unreachable. Under EIP-6963 the page
+ * dispatches `eip6963:requestProvider` and every wallet answers with its own
+ * `eip6963:announceProvider` event, which keeps each provider addressable.
  *
  * `window.ethereum` is used only as a fallback when nothing announces itself.
  */
@@ -89,8 +88,8 @@ export function subscribeToProviders(
 }
 
 /**
- * The legacy path: one provider on `window.ethereum`, with no way to tell which
- * wallet it is beyond its own flags. Only used when EIP-6963 finds nothing.
+ * The legacy path. One provider on `window.ethereum`, identifiable only by the
+ * flags it sets on itself. Used when EIP-6963 finds nothing.
  */
 export function legacyInjectedProvider(): Eip6963ProviderDetail | null {
   if (typeof window === 'undefined') return null;
@@ -112,7 +111,7 @@ export function legacyInjectedProvider(): Eip6963ProviderDetail | null {
   };
 }
 
-/** Discovery result: announced providers, or the legacy one, or nothing. */
+/** Announced providers, or the legacy one, or an empty list. */
 export function discoveredProviders(): readonly Eip6963ProviderDetail[] {
   const announced = snapshotProviders();
   if (announced.length > 0) return announced;

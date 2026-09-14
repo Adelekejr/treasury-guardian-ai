@@ -30,7 +30,7 @@ export function isAllowlisted(address: string | null, allowlist: readonly string
   return allowlist.some((entry) => normaliseAddress(entry) === needle);
 }
 
-/** 0x1234…abcd — used in tables where the full value is still in the title. */
+/** 0x1234…abcd, for tables where the full value stays in the title attribute. */
 export function shortenAddress(value: string | null, lead = 6, tail = 4): string {
   if (!value) return '—';
   if (value.length <= lead + tail + 2) return value;

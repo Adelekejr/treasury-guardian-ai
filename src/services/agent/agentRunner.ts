@@ -1,11 +1,11 @@
 /**
  * Agent orchestration.
  *
- * The order here is the whole safety argument: fetch, classify, run the
- * deterministic policy, and only THEN ask the model — with the verdict already
+ * The order carries the safety argument. Fetch, classify, run the
+ * deterministic policy, and only then ask the model, with the verdict already
  * fixed and passed in as read-only context. The returned assessment is the one
- * the policy engine produced; the AI result can only ever populate the
- * explanation slot.
+ * the policy engine produced. An AI result can only populate the explanation
+ * slot.
  */
 import type { PolicyConfig } from '../../config/policy';
 import type { AgentRun, AgentStep, AgentStepId, TransactionEvent } from '../../types';
@@ -18,7 +18,7 @@ export interface AgentRunOptions {
   readonly policy: PolicyConfig;
   readonly ai: AiAdapter;
   readonly now: number;
-  /** Pause between visible steps, in ms. 0 in tests. */
+  /** Pause between visible steps, in ms. Zero in tests. */
   readonly stepDelayMs?: number;
   readonly onUpdate?: (run: AgentRun) => void;
   readonly signal?: AbortSignal;
@@ -78,7 +78,7 @@ export async function runAgentAnalysis(options: AgentRunOptions): Promise<AgentR
     update({});
   };
 
-  // 1. Fetch — the event is already in hand; record where it came from.
+  // 1. Fetch. The event is already in hand, so record where it came from.
   setStep('FETCH', 'RUNNING', 'Reading the event record.');
   await sleep(delay);
   setStep(
@@ -89,7 +89,7 @@ export async function runAgentAnalysis(options: AgentRunOptions): Promise<AgentR
       : 'Loaded from a deterministic demo fixture.',
   );
 
-  // 2. Classify — describe, do not judge.
+  // 2. Classify. Describe the transaction without judging it.
   setStep('CLASSIFY', 'RUNNING', 'Decoding recipient, value and method.');
   await sleep(delay);
   const missing = [
@@ -101,18 +101,18 @@ export async function runAgentAnalysis(options: AgentRunOptions): Promise<AgentR
     'CLASSIFY',
     missing.length > 0 ? 'DONE' : 'DONE',
     missing.length > 0
-      ? `Decoded with gaps — missing ${missing.join(', ')}.`
+      ? `Decoded with gaps, missing ${missing.join(', ')}.`
       : `${event.direction} · ${event.method} · ${event.decodedSummary}`,
   );
 
-  // 3. Deterministic policy — runs BEFORE the model, with no model input.
+  // 3. Deterministic policy. Runs before the model, with no model input.
   setStep('POLICY', 'RUNNING', 'Running the deterministic rules.');
   await sleep(delay);
   const assessment = assessEvent(event, policy, now);
   update({ assessment });
   setStep('POLICY', 'DONE', `Verdict ${assessment.verdict} from ${assessment.checks.length} rules.`);
 
-  // 4. Explanation — advisory only.
+  // 4. Explanation. Advisory only.
   setStep('RECOMMEND', 'RUNNING', `Asking ${ai.name} to explain the verdict.`);
   let guarded: GuardedAnalysis;
   try {
@@ -124,7 +124,7 @@ export async function runAgentAnalysis(options: AgentRunOptions): Promise<AgentR
       ...(options.signal ? { signal: options.signal } : {}),
     });
     guarded = {
-      // Identity: the verdict handed to the model is the verdict that survives.
+      // Same object in and out, so the verdict handed to the model survives.
       assessment,
       ai: aiState,
       recommendationConflictsWithPolicy: aiConflictsWithPolicy(
